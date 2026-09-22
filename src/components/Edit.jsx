@@ -85,7 +85,6 @@ function Card({ p, i, onAdd }) {
       viewport={viewport}
       transition={{ duration: 0.8, ease: EASE, delay: (i % 3) * 0.07 }}
       className="group flex flex-col"
-      data-cur="Add"
     >
       {/* --- stage -------------------------------------------------------- */}
       <div className="relative aspect-[4/5] overflow-hidden border border-bone/10 bg-soot">

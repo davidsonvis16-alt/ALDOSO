@@ -136,7 +136,6 @@ function Knob({ level, setLevel }) {
       role="slider" tabIndex={0}
       aria-label="Flame control" aria-valuemin={0} aria-valuemax={6} aria-valuenow={level}
       aria-valuetext={LEVELS[level][0]}
-      data-cur="Turn"
       className="relative h-[92px] w-[92px] shrink-0 touch-none select-none"
       onPointerDown={e => { dragging.current = true; e.currentTarget.setPointerCapture(e.pointerId); fromPointer(e) }}
       onPointerMove={e => dragging.current && fromPointer(e)}

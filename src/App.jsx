@@ -1,6 +1,5 @@
 import { useCallback, useEffect, useMemo, useState } from 'react'
 import Preloader from './components/Preloader.jsx'
-import Cursor from './components/Cursor.jsx'
 import { Spine, Nav, Util } from './components/Chrome.jsx'
 import Hero from './components/Hero.jsx'
 import Heat from './components/Heat.jsx'
@@ -74,18 +73,11 @@ export default function App() {
     return () => removeEventListener('scroll', on)
   }, [])
 
-  /* the custom cursor only claims the pointer once the page is interactive */
-  useEffect(() => {
-    document.body.classList.add('has-cursor')
-    return () => document.body.classList.remove('has-cursor')
-  }, [])
-
   return (
     <>
       <Preloader />
       <div className="grain" aria-hidden="true" />
       <div className="vig" aria-hidden="true" />
-      <Cursor />
 
       <Spine />
       <Nav active={active} />

@@ -90,7 +90,7 @@ export default function Hero() {
               </p>
             </Rise>
             <Rise i={3} className="mt-6">
-              <a href="#appliances" data-cur="Look"
+              <a href="#appliances"
                 className="group inline-flex items-center gap-4 overflow-hidden border border-bone/30 px-6 py-3.5">
                 <span className="absolute" />
                 <span className="relative z-10 text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors duration-500 group-hover:text-soot">

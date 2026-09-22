@@ -51,10 +51,6 @@
   :focus-visible { outline: 2px solid var(--color-flame-hi); outline-offset: 3px; border-radius: 1px; }
   ::selection { background: var(--color-flame); color: var(--color-bone); }
   input, textarea { font: inherit; }
-  /* the page hides the system cursor only where a custom one is drawn */
-  @media (hover: hover) and (pointer: fine) {
-    body.has-cursor, body.has-cursor * { cursor: none; }
-  }
 }
 
 @layer components {
