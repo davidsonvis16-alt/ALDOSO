@@ -1,0 +1,1928 @@
+<title>HEARTH — More Than A Cooker</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:ital,wdth,wght@0,62..125,100..900;1,62..125,100..900&family=Instrument+Serif:ital@0;1&family=Caveat:wght@400;600&display=swap">
+<style>
+/* ============================================================
+   HEARTH — visual system
+   Concept: the only colour in the brand is the blue of the flame.
+   ============================================================ */
+:root{
+  --soot:#14110E;        /* deep charcoal-brown, never pure black */
+  --soot-2:#0C0A08;
+  --ash:#2A241D;
+  --ash-2:#3C342B;
+  --cream:#EFE7DA;
+  --paper:#F7F2E9;
+  --clay:#A8724B;        /* warm ochre — the room, not the accent */
+  --clay-dp:#7A4F30;
+  --smoke:#8A7F72;       /* warm-biased neutral */
+  --smoke-2:#B6AA9B;
+  --flame:#2B5CE6;       /* THE accent. gas-ring blue. */
+  --flame-hi:#7FB2FF;
+  --ember:#E86A2A;       /* used only as literal fire, never as UI */
+
+  --ff-d:"Instrument Serif",Georgia,"Times New Roman",serif;
+  --ff-s:"Archivo","Helvetica Neue",Arial,sans-serif;
+  --ff-h:"Caveat","Segoe Script",cursive;
+
+  --spine:clamp(44px,4.4vw,66px);
+  --pad:clamp(20px,4.6vw,76px);
+  --rule:rgba(239,231,218,.16);
+  --rule-dk:rgba(20,17,14,.16);
+  --ease:cubic-bezier(.16,.84,.24,1);
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{
+  margin:0;background:var(--soot);color:var(--cream);
+  font-family:var(--ff-s);font-size:15px;line-height:1.55;
+  font-variation-settings:"wdth" 100;
+  overflow-x:hidden;
+}
+body.locked{overflow:hidden}
+img{max-width:100%}
+a{color:inherit;text-decoration:none}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--flame-hi);outline-offset:3px;border-radius:1px}
+::selection{background:var(--flame);color:#fff}
+
+/* ---- film grain, everywhere, always ---------------------- */
+.grain{
+  position:fixed;inset:-120px;z-index:9000;pointer-events:none;opacity:.42;
+  background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='.5'/></svg>");
+  mix-blend-mode:overlay;animation:grainshift 6s steps(6) infinite;
+}
+@keyframes grainshift{
+  0%{transform:translate(0,0)}20%{transform:translate(-14px,7px)}40%{transform:translate(9px,-11px)}
+  60%{transform:translate(-7px,-6px)}80%{transform:translate(12px,9px)}100%{transform:translate(0,0)}
+}
+.vig{position:fixed;inset:0;z-index:8990;pointer-events:none;
+  box-shadow:inset 0 0 clamp(90px,18vw,300px) rgba(12,10,8,.55)}
+
+/* ---- typography kit -------------------------------------- */
+.disp{font-family:var(--ff-d);font-weight:400;line-height:.83;letter-spacing:-.022em;text-wrap:balance}
+.lab{font-size:10px;font-weight:600;letter-spacing:.24em;text-transform:uppercase;
+  font-variation-settings:"wdth" 92;color:var(--smoke-2)}
+.hand{font-family:var(--ff-h);font-size:clamp(17px,1.5vw,22px);color:var(--clay);transform:rotate(-3.5deg);display:inline-block}
+.num{font-variant-numeric:tabular-nums}
+
+/* ---- the SPINE (logo + progress + live section) ---------- */
+.spine{position:fixed;left:0;top:0;bottom:0;width:var(--spine);z-index:600;
+  border-right:1px solid var(--rule);display:flex;flex-direction:column;
+  align-items:center;justify-content:space-between;padding:14px 0;
+  mix-blend-mode:difference;color:#fff}
+.spine__mark{writing-mode:vertical-rl;transform:rotate(180deg);
+  font-family:var(--ff-s);font-weight:800;font-size:clamp(13px,1.15vw,16px);
+  letter-spacing:.52em;font-variation-settings:"wdth" 118;padding-bottom:4px}
+.spine__mark i{font-style:normal;display:inline-block;transition:transform .5s var(--ease)}
+.spine:hover .spine__mark i{transform:translateX(3px)}
+.spine__track{flex:1;width:1px;background:rgba(255,255,255,.18);margin:18px 0;position:relative}
+.spine__fill{position:absolute;top:0;left:-1px;width:3px;background:#fff;height:0%}
+.spine__now{writing-mode:vertical-rl;font-size:9px;letter-spacing:.3em;text-transform:uppercase;
+  font-weight:600;opacity:.75;height:132px;overflow:hidden}
+.spine__pct{font-size:9px;font-weight:700;letter-spacing:.06em;font-variant-numeric:tabular-nums}
+
+/* ---- floating nav ---------------------------------------- */
+.nav{position:fixed;z-index:620;top:clamp(16px,2.4vw,30px);left:calc(var(--spine) + clamp(16px,2.6vw,38px));
+  display:flex;gap:clamp(14px,1.9vw,30px);align-items:baseline;
+  transition:opacity .45s var(--ease),transform .45s var(--ease)}
+.nav a{font-size:11px;font-weight:600;letter-spacing:.19em;text-transform:uppercase;
+  font-variation-settings:"wdth" 88;position:relative;padding-bottom:7px;color:var(--cream);
+  mix-blend-mode:difference}
+.nav a::after{content:"";position:absolute;left:0;bottom:2px;height:1px;width:100%;
+  background:var(--flame-hi);transform:scaleX(0);transform-origin:right;transition:transform .42s var(--ease)}
+.nav a:hover::after,.nav a.on::after{transform:scaleX(1);transform-origin:left}
+.nav a i{font-style:normal;font-size:8px;opacity:.45;position:absolute;top:-8px;right:-9px;letter-spacing:0}
+.nav.tuck{opacity:0;transform:translateY(-14px);pointer-events:none}
+
+.util{position:fixed;z-index:620;top:clamp(14px,2.2vw,27px);right:clamp(16px,3vw,40px);
+  display:flex;gap:6px;align-items:center;mix-blend-mode:difference}
+.ubtn{width:36px;height:36px;display:grid;place-items:center;border:1px solid rgba(255,255,255,.28);
+  border-radius:50%;color:#fff;position:relative;transition:background .3s,border-color .3s,transform .3s var(--ease)}
+.ubtn:hover{background:#fff;color:#000;transform:translateY(-2px)}
+.ubtn svg{width:15px;height:15px;fill:none;stroke:currentColor;stroke-width:1.5}
+.ubtn--menu{width:auto;padding:0 15px;border-radius:99px;font-size:10px;font-weight:700;letter-spacing:.2em;gap:8px}
+.ubtn--menu .bars{display:inline-flex;flex-direction:column;gap:3px;width:13px}
+.ubtn--menu .bars span{height:1.5px;background:currentColor;display:block;transition:transform .4s var(--ease)}
+.ubtn--menu:hover .bars span:nth-child(2){transform:translateX(4px)}
+.cartdot{position:absolute;top:-3px;right:-3px;min-width:17px;height:17px;padding:0 4px;border-radius:99px;
+  background:var(--flame);color:#fff;font-size:9.5px;font-weight:800;display:grid;place-items:center;
+  transform:scale(0);transition:transform .38s var(--ease);font-variant-numeric:tabular-nums}
+.cartdot.show{transform:scale(1)}
+
+/* ---- custom cursor --------------------------------------- */
+.cur,.curdot{position:fixed;z-index:9500;pointer-events:none;top:0;left:0;border-radius:50%;
+  mix-blend-mode:difference;will-change:transform}
+.cur{width:30px;height:30px;border:1px solid rgba(255,255,255,.75);margin:-15px 0 0 -15px;
+  transition:width .3s var(--ease),height .3s var(--ease),margin .3s var(--ease),background .3s,border-color .3s}
+.curdot{width:4px;height:4px;background:#fff;margin:-2px 0 0 -2px}
+.cur.hot{width:62px;height:62px;margin:-31px 0 0 -31px;background:#fff;border-color:#fff}
+.cur.hot::after{content:attr(data-l);position:absolute;inset:0;display:grid;place-items:center;
+  font-size:8px;font-weight:800;letter-spacing:.14em;color:#000;mix-blend-mode:normal}
+@media (hover:none),(pointer:coarse){.cur,.curdot{display:none}}
+
+/* ---- reveal primitives (rest state is VISIBLE) ----------- */
+.rv{opacity:1;transform:none}
+.js .rv{opacity:0;transform:translateY(26px);transition:opacity .9s var(--ease),transform .9s var(--ease)}
+.js .rv.in{opacity:1;transform:none}
+.js .rv[data-d="1"]{transition-delay:.09s}
+.js .rv[data-d="2"]{transition-delay:.18s}
+.js .rv[data-d="3"]{transition-delay:.27s}
+.js .rv[data-d="4"]{transition-delay:.36s}
+.js .rv[data-d="5"]{transition-delay:.45s}
+
+/* line-by-line display reveal */
+.lines span{display:block;overflow:hidden}
+.lines b{display:block;font-weight:inherit}
+.js .lines b{transform:translateY(105%);transition:transform 1.05s var(--ease)}
+.js .lines.in b{transform:none}
+.js .lines.in b:nth-child(1){transition-delay:.02s}
+.lines span:nth-child(2) b{transition-delay:.12s !important}
+.lines span:nth-child(3) b{transition-delay:.22s !important}
+.lines span:nth-child(4) b{transition-delay:.32s !important}
+
+main{padding-left:var(--spine)}
+section{position:relative}
+
+/* ============================================================
+   THE ROOM — a kitchen built in layers, not photographed.
+   Warm afternoon, Nairobi, roughly 16:40.
+   ============================================================ */
+.hero{min-height:clamp(620px,94vh,1000px);display:flex;flex-direction:column;justify-content:flex-end;
+  position:relative;overflow:hidden;background:var(--soot)}
+.room{position:absolute;inset:0;overflow:hidden;background:#100c09}
+.shot{position:absolute;inset:0;width:100%;height:100%;display:block}
+.shot--anim{mix-blend-mode:screen;pointer-events:none}
+.fg{position:absolute;left:0;right:0;bottom:0;height:16%;pointer-events:none;
+  background:linear-gradient(0deg,rgba(11,8,6,.95),rgba(11,8,6,.4) 46%,transparent);}
+/* hero copy */
+.hero__copy .lab{text-shadow:0 2px 14px rgba(8,6,4,.85)}
+.hero__copy{position:relative;z-index:5;padding:0 var(--pad) clamp(30px,6vh,72px);
+  display:grid;grid-template-columns:minmax(0,1fr) auto;gap:clamp(18px,3vw,54px);align-items:end}
+.hero__h{font-size:clamp(58px,11.6vw,190px);margin:0;color:var(--paper);
+  text-shadow:0 8px 40px rgba(0,0,0,.45)}
+.hero__h em{font-style:italic;color:var(--paper)}
+.hero__sub{margin:clamp(14px,2vh,26px) 0 0;max-width:34ch;font-size:clamp(14px,1.35vw,18px);
+  color:rgba(239,231,218,.82);line-height:1.5}
+.hero__cta{display:inline-flex;align-items:center;gap:14px;margin-top:clamp(18px,2.6vh,34px);
+  border:1px solid rgba(239,231,218,.4);border-radius:99px;padding:14px 26px;
+  font-size:11px;font-weight:700;letter-spacing:.2em;text-transform:uppercase;position:relative;overflow:hidden;
+  transition:color .4s var(--ease),border-color .4s}
+.hero__cta span{position:relative;z-index:2}
+.hero__cta::before{content:"";position:absolute;inset:0;background:var(--paper);
+  transform:translateY(101%);transition:transform .5s var(--ease);z-index:1}
+.hero__cta:hover{color:var(--soot);border-color:var(--paper)}
+.hero__cta:hover::before{transform:none}
+.hero__cta .arw{position:relative;z-index:2;transition:transform .45s var(--ease)}
+.hero__cta:hover .arw{transform:translateX(7px)}
+.hero__note{position:absolute;right:clamp(14px,9vw,180px);bottom:clamp(120px,22vh,230px);z-index:6;text-align:center}
+.hero__note .hand{color:#ffd9a8;font-size:clamp(18px,1.9vw,27px)}
+.hero__note svg{display:block;margin:2px auto 0;width:74px;stroke:#ffd9a8;fill:none;opacity:.8}
+.hero__meta{z-index:6;text-align:right;font-size:9.5px;letter-spacing:.2em;color:rgba(239,231,218,.5);
+  line-height:2;text-transform:uppercase;font-variant-numeric:tabular-nums;white-space:nowrap}
+.hero__meta b{color:var(--flame-hi);font-weight:700}
+.scrollhint{position:absolute;left:var(--pad);bottom:12px;z-index:6;display:flex;align-items:center;gap:10px;
+  font-size:9px;letter-spacing:.26em;color:rgba(239,231,218,.45);text-transform:uppercase}
+.scrollhint i{display:block;width:34px;height:1px;background:rgba(239,231,218,.45);position:relative;overflow:hidden}
+.scrollhint i::after{content:"";position:absolute;inset:0;background:var(--flame-hi);animation:sweep 2.6s var(--ease) infinite}
+@keyframes sweep{0%{transform:translateX(-100%)}60%,100%{transform:translateX(100%)}}
+
+/* ---- flame + steam (shared) ------------------------------ */
+.flame{transform-origin:50% 100%;animation:flick 1.1s ease-in-out infinite alternate}
+.flame--b{animation-duration:.78s;animation-delay:-.3s}
+@keyframes flick{0%{transform:scaleY(.94) scaleX(1.02) translateY(1px)}100%{transform:scaleY(1.07) scaleX(.97)}}
+.steam{position:absolute;pointer-events:none}
+.steam i{position:absolute;bottom:0;width:13px;height:13px;border-radius:50%;
+  background:radial-gradient(circle,rgba(255,244,226,.6),rgba(255,244,226,0) 70%);
+  filter:blur(5px);animation:rise 5.2s ease-out infinite}
+@keyframes rise{
+  0%{opacity:0;transform:translate(0,0) scale(.5)}
+  18%{opacity:.85}
+  100%{opacity:0;transform:translate(var(--dx,14px),-150px) scale(2.9)}
+}
+
+/* ============================================================
+   SECTION 2 — GOOD FOOD STARTS HERE.  (asymmetric plate wall)
+   ============================================================ */
+.s2{background:var(--paper);color:var(--soot);padding:clamp(70px,13vh,150px) 0 clamp(60px,10vh,130px);overflow:hidden}
+.s2 .lab{color:var(--clay-dp)}
+.s2__head{padding:0 var(--pad);display:grid;grid-template-columns:1fr auto;gap:30px;align-items:end;
+  border-bottom:1px solid var(--rule-dk);padding-bottom:clamp(22px,3vh,40px)}
+.s2__h{font-size:clamp(46px,10.4vw,168px);margin:12px 0 0}
+.s2__h em{font-style:italic}
+.s2__aside{max-width:30ch;font-size:13.5px;color:#4a4036;line-height:1.62}
+.plates{position:relative;padding:clamp(34px,6vh,74px) var(--pad) 0;
+  display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(12px,1.8vw,26px);align-items:start}
+.plate{position:relative;overflow:hidden;background:#1a140f;will-change:transform}
+.plate__img{position:absolute;inset:0;transition:transform 1.3s var(--ease),filter .7s}
+.plate:hover .plate__img{transform:scale(1.045)}
+.plate figcaption{position:absolute;left:0;right:0;bottom:0;padding:11px 13px;z-index:3;
+  display:flex;justify-content:space-between;align-items:flex-end;gap:10px;
+  background:linear-gradient(0deg,rgba(10,8,6,.8),transparent);
+  font-size:9px;letter-spacing:.2em;text-transform:uppercase;color:rgba(255,245,230,.9)}
+.plate figcaption b{font-weight:700;color:var(--flame-hi);font-variant-numeric:tabular-nums}
+.p1{grid-column:1/span 5;aspect-ratio:4/5}
+.p2{grid-column:7/span 6;aspect-ratio:16/10;margin-top:clamp(40px,9vh,120px)}
+.p3{grid-column:2/span 3;aspect-ratio:1/1;margin-top:clamp(-40px,-4vh,-10px)}
+.p4{grid-column:6/span 3;aspect-ratio:3/4;margin-top:clamp(18px,4vh,60px)}
+.p5{grid-column:10/span 3;aspect-ratio:1/1.15;margin-top:clamp(-30px,-3vh,0px)}
+.s2__pull{grid-column:1/span 4;align-self:center;padding:clamp(20px,4vh,60px) 0 0}
+.s2__pull p{font-family:var(--ff-d);font-size:clamp(22px,2.5vw,38px);line-height:1.12;margin:0;color:var(--ash)}
+.s2__pull .hand{margin-top:14px}
+
+/* ============================================================
+   SECTION 3 — THE COOKER EDIT
+   ============================================================ */
+.s3{background:var(--cream);color:var(--soot);padding:clamp(70px,12vh,140px) 0 clamp(80px,14vh,170px);position:relative}
+.s3__head{padding:0 var(--pad);display:flex;flex-wrap:wrap;gap:20px 40px;align-items:flex-end;justify-content:space-between}
+.s3__h{font-size:clamp(46px,9.6vw,158px);margin:10px 0 0}
+.s3__h em{font-style:italic}
+.s3__filters{display:flex;gap:7px;flex-wrap:wrap;padding-bottom:8px}
+.chip{border:1px solid rgba(20,17,14,.26);border-radius:99px;padding:7px 15px;font-size:10px;font-weight:600;
+  letter-spacing:.16em;text-transform:uppercase;transition:.3s var(--ease);color:#3a3129}
+.chip:hover{border-color:var(--soot)}
+.chip.on{background:var(--soot);color:var(--cream);border-color:var(--soot)}
+.edit{padding:clamp(34px,6vh,70px) var(--pad) 0;display:grid;grid-template-columns:repeat(12,1fr);
+  gap:clamp(26px,3.4vw,58px) clamp(14px,2vw,30px);align-items:end}
+.prod{position:relative;display:flex;flex-direction:column;transition:opacity .5s,filter .5s}
+.prod.dim{opacity:.16;filter:grayscale(1)}
+.prod__stage{position:relative;display:flex;align-items:flex-end;justify-content:center;
+  padding:clamp(14px,2.4vw,32px) 0;border-bottom:1px solid rgba(20,17,14,.2)}
+.prod__stage::before{content:"";position:absolute;left:8%;right:8%;bottom:-1px;height:58%;
+  background:radial-gradient(60% 100% at 50% 100%,rgba(168,114,75,.26),transparent 72%);pointer-events:none}
+.prod__stage svg{width:100%;height:auto;position:relative;z-index:2;
+  filter:drop-shadow(0 26px 26px rgba(20,17,14,.22));transition:transform .9s var(--ease)}
+.prod:hover .prod__stage svg{transform:translateY(-9px) rotate(-.5deg)}
+.prod__no{position:absolute;top:0;left:0;font-size:9px;letter-spacing:.22em;color:var(--smoke);font-weight:700}
+.prod__tag{position:absolute;top:0;right:0;font-size:9px;letter-spacing:.2em;font-weight:700;
+  text-transform:uppercase;color:var(--flame)}
+.prod__meta{display:flex;justify-content:space-between;gap:14px;padding-top:12px;align-items:flex-start}
+.prod__name{font-family:var(--ff-d);font-size:clamp(20px,2vw,31px);line-height:1.02;margin:0;letter-spacing:-.01em}
+.prod__spec{font-size:10px;letter-spacing:.14em;text-transform:uppercase;color:var(--smoke);margin-top:7px;
+  font-variation-settings:"wdth" 88}
+.prod__price{text-align:right;white-space:nowrap}
+.prod__price .cur{font-size:9.5px;letter-spacing:.14em;color:var(--clay-dp);display:block;font-weight:700}
+.prod__price .val{font-size:clamp(17px,1.6vw,23px);font-weight:600;font-variant-numeric:tabular-nums;
+  font-variation-settings:"wdth" 86;letter-spacing:-.01em}
+.prod__buy{margin-top:14px;display:flex;align-items:center;gap:10px}
+.addbtn{flex:1;border:1px solid var(--soot);border-radius:0;padding:12px 16px;font-size:10px;font-weight:700;
+  letter-spacing:.2em;text-transform:uppercase;position:relative;overflow:hidden;color:var(--soot);
+  display:flex;align-items:center;justify-content:space-between;gap:10px;transition:color .35s var(--ease)}
+.addbtn span{position:relative;z-index:2}
+.addbtn::before{content:"";position:absolute;inset:0;background:var(--soot);transform:translateX(-101%);
+  transition:transform .46s var(--ease);z-index:1}
+.addbtn:hover{color:var(--cream)}
+.addbtn:hover::before{transform:none}
+.addbtn.done::before{transform:none;background:var(--flame)}
+.addbtn.done{color:#fff;border-color:var(--flame)}
+.stepper{display:flex;align-items:center;border:1px solid rgba(20,17,14,.26)}
+.stepper button{width:30px;height:38px;font-size:14px;line-height:1;color:#3a3129;transition:background .25s}
+.stepper button:hover{background:rgba(20,17,14,.07)}
+.stepper var{width:24px;text-align:center;font-style:normal;font-size:12px;font-weight:700;font-variant-numeric:tabular-nums}
+/* deliberately unequal scales */
+.e1{grid-column:1/span 6}
+.e2{grid-column:8/span 4;margin-bottom:clamp(30px,7vh,90px)}
+.e3{grid-column:1/span 3}
+.e4{grid-column:5/span 7}
+.e5{grid-column:2/span 3;margin-top:clamp(10px,3vh,46px)}
+.e6{grid-column:6/span 4}
+.e7{grid-column:10/span 3;margin-bottom:clamp(20px,5vh,70px)}
+.editnote{grid-column:9/span 4;align-self:center}
+.editnote p{font-family:var(--ff-d);font-size:clamp(19px,1.9vw,27px);line-height:1.2;margin:0 0 8px;color:var(--ash)}
+
+/* ============================================================
+   SECTION 4 — FOR THE PEOPLE AROUND THE TABLE (knockout type)
+   ============================================================ */
+.s4{background:var(--soot-2);color:var(--cream);padding:clamp(80px,15vh,180px) var(--pad);position:relative;overflow:hidden}
+.s4__bed{position:absolute;inset:0;opacity:.34}
+.s4__h{position:relative;z-index:3;font-size:clamp(52px,13.6vw,230px);margin:0;line-height:.8;
+  letter-spacing:-.03em;font-family:var(--ff-d);mix-blend-mode:screen;color:var(--paper)}
+.s4__h span{display:block}
+.s4__h .knock{background-image:var(--knock);background-size:cover;background-position:center;
+  -webkit-background-clip:text;background-clip:text;color:transparent;filter:saturate(1.15) contrast(1.06)}
+.s4__grid{position:relative;z-index:3;display:grid;grid-template-columns:repeat(12,1fr);
+  gap:clamp(14px,2vw,30px);margin-top:clamp(34px,6vh,72px);align-items:end}
+.s4__q{grid-column:1/span 5;font-size:14px;line-height:1.62;color:rgba(239,231,218,.72);margin:0}
+.s4__q b{color:var(--paper);font-weight:600}
+.s4__f{grid-column:7/span 3;aspect-ratio:3/4;position:relative;overflow:hidden}
+.s4__f2{grid-column:10/span 3;aspect-ratio:1/1;position:relative;overflow:hidden;margin-bottom:clamp(20px,5vh,64px)}
+.s4__cap{position:absolute;bottom:9px;left:11px;font-size:9px;letter-spacing:.2em;text-transform:uppercase;
+  color:rgba(255,245,230,.85)}
+
+/* ============================================================
+   SECTION 5 — POWER. PRECISION. SIMPLICITY.
+   ============================================================ */
+.s5{background:var(--ash);color:var(--cream);padding:clamp(70px,13vh,160px) var(--pad);position:relative;overflow:hidden}
+.s5__h{font-size:clamp(42px,8.6vw,140px);margin:14px 0 clamp(30px,6vh,70px);font-family:var(--ff-d);line-height:.86}
+.s5__h b{font-weight:400;display:block}
+.s5__h b:nth-child(2){padding-left:clamp(20px,7vw,140px)}
+.s5__h b:nth-child(3){padding-left:clamp(40px,14vw,280px);font-style:italic}
+.s5__lay{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(18px,2.6vw,40px);align-items:stretch}
+.s5__main{grid-column:1/span 7;position:relative;background:#171310;overflow:hidden;min-height:clamp(320px,52vh,520px);
+  border:1px solid var(--rule)}
+.s5__side{grid-column:8/span 5;display:flex;flex-direction:column;gap:clamp(14px,2vw,26px)}
+.spec{border-top:1px solid var(--rule);padding-top:14px;display:grid;grid-template-columns:auto 1fr;gap:16px;align-items:start}
+.spec__k{font-size:9.5px;letter-spacing:.2em;color:var(--flame-hi);font-weight:700;font-variant-numeric:tabular-nums;padding-top:3px}
+.spec__t{font-family:var(--ff-d);font-size:clamp(19px,1.85vw,26px);line-height:1.12;margin:0 0 5px}
+.spec__d{font-size:12.5px;color:rgba(239,231,218,.6);line-height:1.58;margin:0;max-width:44ch}
+/* live knob */
+.knobwrap{border:1px solid var(--rule);padding:clamp(16px,2vw,24px);display:flex;gap:20px;align-items:center;
+  background:linear-gradient(150deg,rgba(255,255,255,.03),transparent)}
+.knob{width:98px;height:98px;flex:none;position:relative;cursor:grab;touch-action:none}
+.knob:active{cursor:grabbing}
+.knob svg{width:100%;height:100%;display:block}
+.knob__rot{transform-origin:50% 50%;transition:transform .12s linear}
+.knobinfo .lab{color:var(--flame-hi)}
+.knobinfo strong{display:block;font-family:var(--ff-d);font-size:clamp(22px,2.2vw,32px);line-height:1;margin:7px 0 5px}
+.knobinfo p{margin:0;font-size:12px;color:rgba(239,231,218,.58);max-width:26ch;line-height:1.55}
+.ann{position:absolute;z-index:4;font-size:9px;letter-spacing:.18em;text-transform:uppercase;color:rgba(239,231,218,.82);
+  white-space:nowrap;font-variant-numeric:tabular-nums}
+.ann::before{content:"";position:absolute;background:var(--flame-hi);height:1px;top:50%}
+.ann--l{padding-left:60px}
+.ann--l::before{left:0;width:50px;transform-origin:left;transform:scaleX(0);transition:transform .8s var(--ease)}
+.ann--r{padding-right:60px}
+.ann--r::before{right:0;width:50px;transform-origin:right;transform:scaleX(0);transition:transform .8s var(--ease)}
+.s5__main.in .ann::before{transform:scaleX(1)}
+.ann i{color:var(--flame-hi);font-style:normal;font-weight:700}
+
+/* ============================================================
+   SECTION 6 — MADE FOR KENYAN HOMES.
+   ============================================================ */
+.s6{background:var(--paper);color:var(--soot);padding:clamp(70px,13vh,160px) 0 0;overflow:hidden}
+.s6__top{padding:0 var(--pad);display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(18px,2.6vw,40px);align-items:end}
+.s6__h{grid-column:1/span 7;font-size:clamp(44px,9.2vw,150px);margin:12px 0 0;font-family:var(--ff-d);line-height:.85}
+.s6__h em{font-style:italic}
+.s6__txt{grid-column:9/span 4;font-size:13.5px;line-height:1.66;color:#4a4036;margin:0 0 6px}
+.s6__scene{margin-top:clamp(30px,6vh,64px);position:relative;height:clamp(340px,58vh,600px);overflow:hidden;
+  border-top:1px solid var(--rule-dk);border-bottom:1px solid var(--rule-dk)}
+.s6__facts{padding:0 var(--pad);display:grid;grid-template-columns:repeat(4,1fr);
+  border-bottom:1px solid var(--rule-dk)}
+.fact{padding:clamp(20px,3vw,34px) clamp(14px,2vw,26px);border-left:1px solid var(--rule-dk)}
+.fact:first-child{border-left:0;padding-left:0}
+.fact b{display:block;font-family:var(--ff-d);font-size:clamp(28px,3.4vw,52px);line-height:1;margin-bottom:8px;
+  font-variant-numeric:tabular-nums}
+.fact span{font-size:10px;letter-spacing:.18em;text-transform:uppercase;color:var(--smoke);line-height:1.5;display:block}
+.ticker{overflow:hidden;border-bottom:1px solid var(--rule-dk);padding:13px 0;background:var(--paper)}
+.ticker__in{display:flex;gap:44px;white-space:nowrap;width:max-content;animation:tick 42s linear infinite}
+.ticker span{font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--smoke);
+  display:inline-flex;align-items:center;gap:44px}
+.ticker span::after{content:"◆";color:var(--clay);font-size:6px}
+@keyframes tick{to{transform:translateX(-50%)}}
+@media (prefers-reduced-motion:reduce){.ticker__in{animation:none}}
+
+/* ============================================================
+   FOOTER — a different animal entirely
+   ============================================================ */
+.foot{background:var(--soot-2);color:var(--cream);padding:clamp(56px,10vh,110px) var(--pad) 26px;position:relative;overflow:hidden}
+.foot__line{font-family:var(--ff-d);font-size:clamp(24px,3vw,46px);line-height:1;margin:0 0 clamp(30px,6vh,64px);
+  display:flex;flex-wrap:wrap;gap:0 18px;align-items:baseline}
+.foot__line em{font-style:italic;color:var(--clay)}
+.foot__cols{display:grid;grid-template-columns:repeat(12,1fr);gap:clamp(18px,2.4vw,36px);
+  border-top:1px solid var(--rule);padding-top:clamp(22px,3.4vh,40px)}
+.fcol{grid-column:span 3}
+.fcol h4{margin:0 0 14px;font-size:9.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--smoke);font-weight:700}
+.fcol ul{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:8px}
+.fcol a,.fcol li{font-size:12.5px;color:rgba(239,231,218,.78);transition:color .3s}
+.fcol a:hover{color:var(--flame-hi)}
+.fcol .num{color:var(--paper)}
+.wordmark{margin-top:clamp(34px,6vh,72px);width:100%;display:block;overflow:hidden}
+.wordmark svg{width:100%;height:auto;display:block}
+.wordmark text{fill:none;stroke:rgba(239,231,218,.5);stroke-width:.6;
+  font-family:var(--ff-s);font-weight:800;letter-spacing:-.02em}
+.wordmark .solid{fill:var(--cream);stroke:none}
+.foot__base{display:flex;flex-wrap:wrap;gap:12px 26px;justify-content:space-between;align-items:center;
+  border-top:1px solid var(--rule);margin-top:22px;padding-top:18px;
+  font-size:9.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--smoke)}
+.foot__base b{color:var(--flame-hi);font-weight:700}
+
+/* ============================================================
+   OVERLAYS — menu, search, cart, toast
+   ============================================================ */
+.sheet{position:fixed;inset:0;z-index:800;visibility:hidden;pointer-events:none}
+.sheet.open{visibility:visible;pointer-events:auto}
+.sheet__scrim{position:absolute;inset:0;background:rgba(8,6,5,.72);opacity:0;transition:opacity .5s var(--ease);
+  backdrop-filter:blur(3px)}
+.sheet.open .sheet__scrim{opacity:1}
+
+.menu__panel{position:absolute;inset:0;background:var(--soot);
+  clip-path:inset(0 0 100% 0);transition:clip-path .8s var(--ease);
+  display:grid;grid-template-columns:1.25fr .75fr;padding:clamp(60px,10vh,110px) var(--pad) var(--pad);gap:40px}
+.sheet.open .menu__panel{clip-path:inset(0 0 0 0)}
+.menu__list{list-style:none;margin:0;padding:0;align-self:center}
+.menu__list li{overflow:hidden}
+.menu__list a{font-family:var(--ff-d);font-size:clamp(38px,7.2vw,104px);line-height:1.02;display:block;
+  transform:translateY(110%);transition:transform .8s var(--ease),color .3s;position:relative;padding-left:0}
+.sheet.open .menu__list a{transform:none}
+.menu__list li:nth-child(2) a{transition-delay:.07s}
+.menu__list li:nth-child(3) a{transition-delay:.14s}
+.menu__list li:nth-child(4) a{transition-delay:.21s}
+.menu__list li:nth-child(5) a{transition-delay:.28s}
+.menu__list a:hover{color:var(--clay);font-style:italic}
+.menu__list a sup{font-family:var(--ff-s);font-size:11px;font-weight:700;letter-spacing:.14em;color:var(--smoke);
+  vertical-align:super;margin-left:10px}
+.menu__side{align-self:end;display:flex;flex-direction:column;gap:22px;border-left:1px solid var(--rule);
+  padding-left:clamp(18px,2.4vw,34px)}
+.menu__side p{margin:0;font-size:12.5px;color:rgba(239,231,218,.65);line-height:1.6;max-width:30ch}
+
+.search__panel{position:absolute;left:0;right:0;top:0;background:var(--paper);color:var(--soot);
+  padding:clamp(60px,9vh,100px) var(--pad) clamp(26px,4vh,46px);transform:translateY(-101%);
+  transition:transform .7s var(--ease);max-height:100%;overflow:auto}
+.sheet.open .search__panel{transform:none}
+.search__field{display:flex;align-items:center;gap:16px;border-bottom:1px solid var(--soot);padding-bottom:12px}
+.search__field input{flex:1;border:0;background:none;font-family:var(--ff-d);font-size:clamp(28px,5vw,70px);
+  color:var(--soot);outline:none;padding:0}
+.search__field input::placeholder{color:rgba(20,17,14,.22)}
+.search__res{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:22px;margin-top:26px}
+.sres{text-align:left;border-top:1px solid var(--rule-dk);padding-top:12px;display:block;width:100%}
+.sres svg{width:100%;height:auto;max-height:110px;margin-bottom:8px}
+.sres b{display:block;font-family:var(--ff-d);font-size:17px;line-height:1.1;font-weight:400}
+.sres i{font-style:normal;font-size:11px;color:var(--smoke);letter-spacing:.12em}
+.search__hint{margin-top:16px;display:flex;gap:9px;flex-wrap:wrap;align-items:center}
+
+.cart__panel{position:absolute;right:0;top:0;bottom:0;width:min(440px,100%);background:var(--cream);color:var(--soot);
+  transform:translateX(101%);transition:transform .66s var(--ease);display:flex;flex-direction:column}
+.sheet.open .cart__panel{transform:none}
+.cart__head{padding:24px var(--pad) 18px;padding-left:26px;padding-right:26px;
+  display:flex;justify-content:space-between;align-items:baseline;border-bottom:1px solid var(--rule-dk)}
+.cart__head h3{margin:0;font-family:var(--ff-d);font-size:30px;font-weight:400;line-height:1}
+.cart__body{flex:1;overflow:auto;padding:0 26px}
+.citem{display:grid;grid-template-columns:64px 1fr auto;gap:14px;padding:18px 0;border-bottom:1px solid var(--rule-dk);
+  align-items:center}
+.citem svg{width:64px;height:auto}
+.citem h5{margin:0 0 4px;font-family:var(--ff-d);font-weight:400;font-size:16px;line-height:1.1}
+.citem .prod__spec{margin-top:3px}
+.citem__r{text-align:right;font-variant-numeric:tabular-nums;font-size:13px;font-weight:600}
+.citem__x{display:block;margin-top:6px;font-size:9px;letter-spacing:.16em;text-transform:uppercase;color:var(--smoke);
+  transition:color .3s}
+.citem__x:hover{color:var(--ember)}
+.cart__empty{padding:44px 0;color:var(--smoke);font-size:13px;line-height:1.6}
+.cart__foot{padding:20px 26px 26px;border-top:1px solid var(--soot);background:var(--cream)}
+.crow{display:flex;justify-content:space-between;font-size:12px;margin-bottom:9px;color:#4a4036}
+.crow.tot{font-size:15px;color:var(--soot);font-weight:700;margin-top:12px;padding-top:12px;border-top:1px solid var(--rule-dk)}
+.crow .num{font-variant-numeric:tabular-nums}
+.cbtn{width:100%;margin-top:16px;background:var(--soot);color:var(--cream);padding:16px;font-size:11px;font-weight:700;
+  letter-spacing:.22em;text-transform:uppercase;display:flex;justify-content:space-between;transition:background .35s}
+.cbtn:hover{background:var(--flame)}
+.closex{font-size:10px;letter-spacing:.2em;text-transform:uppercase;font-weight:700;display:flex;gap:8px;align-items:center}
+.closex:hover{color:var(--ember)}
+
+.toast{position:fixed;left:50%;bottom:26px;transform:translate(-50%,120%);z-index:900;
+  background:var(--paper);color:var(--soot);padding:13px 20px;display:flex;gap:14px;align-items:center;
+  font-size:11px;letter-spacing:.14em;text-transform:uppercase;font-weight:600;
+  transition:transform .55s var(--ease);box-shadow:0 20px 50px rgba(0,0,0,.4);max-width:calc(100vw - 32px)}
+.toast.show{transform:translate(-50%,0)}
+.toast b{color:var(--flame);font-weight:800}
+
+/* ---- intro curtain --------------------------------------- */
+.intro{position:fixed;inset:0;z-index:9800;background:var(--soot-2);display:grid;place-items:center;
+  transition:clip-path 1.05s var(--ease);clip-path:inset(0 0 0 0)}
+.intro.gone{clip-path:inset(0 0 100% 0);pointer-events:none}
+.intro__w{font-family:var(--ff-s);font-weight:800;font-size:clamp(34px,8vw,110px);letter-spacing:.14em;
+  font-variation-settings:"wdth" 118;display:flex;color:var(--cream)}
+.intro__w i{font-style:normal;opacity:0;transform:translateY(22px);animation:ig .7s var(--ease) forwards}
+.intro__bar{position:absolute;bottom:14%;left:50%;transform:translateX(-50%);width:min(210px,42vw);height:1px;
+  background:rgba(239,231,218,.2)}
+.intro__bar i{position:absolute;inset:0;background:var(--flame-hi);transform-origin:left;transform:scaleX(0);
+  animation:ib 1.5s var(--ease) forwards}
+@keyframes ig{to{opacity:1;transform:none}}
+@keyframes ib{to{transform:scaleX(1)}}
+
+/* ---- responsive ------------------------------------------ */
+@media (max-width:1020px){
+  .e1{grid-column:1/span 7}.e2{grid-column:9/span 4}.e3{grid-column:1/span 4}
+  .e4{grid-column:6/span 7}.e5{grid-column:1/span 4}.e6{grid-column:6/span 4}
+  .e7{grid-column:1/span 4}.editnote{grid-column:6/span 7}
+  .s4__f{grid-column:1/span 6}.s4__f2{grid-column:7/span 6}.s4__q{grid-column:1/span 12}
+  .s5__main{grid-column:1/span 12}.s5__side{grid-column:1/span 12}
+  .s6__h{grid-column:1/span 12}.s6__txt{grid-column:1/span 8}
+  .fcol{grid-column:span 6}
+  .menu__panel{grid-template-columns:1fr}
+  .props{display:none}
+}
+@media (max-width:760px){
+  .nav{gap:13px;left:calc(var(--spine) + 12px);top:auto;bottom:0;width:calc(100% - var(--spine));
+    background:rgba(12,10,8,.82);backdrop-filter:blur(10px);padding:11px 12px;left:var(--spine);
+    justify-content:space-between;border-top:1px solid var(--rule)}
+  .nav a{font-size:9.5px;letter-spacing:.11em;padding-bottom:0;mix-blend-mode:normal}
+  .nav a i{display:none}
+  .nav.tuck{opacity:1;transform:none;pointer-events:auto}
+  .hero__copy{grid-template-columns:1fr}
+  .hero__meta{text-align:left}
+  .hero__note{right:auto;left:var(--pad);bottom:auto;top:16vh}
+  .scrollhint{display:none}
+  .s2__head{grid-template-columns:1fr}
+  .plates{grid-template-columns:repeat(6,1fr)}
+  .p1{grid-column:1/span 4}.p2{grid-column:1/span 6;margin-top:16px}.p3{grid-column:1/span 3;margin-top:0}
+  .p4{grid-column:4/span 3;margin-top:0}.p5{grid-column:1/span 4}.s2__pull{grid-column:1/span 6}
+  .edit{grid-template-columns:repeat(6,1fr)}
+  .e1,.e2,.e3,.e4,.e5,.e6,.e7,.editnote{grid-column:1/span 6;margin:0}
+  .e3,.e5,.e7{grid-column:1/span 4}
+  .s6__facts{grid-template-columns:repeat(2,1fr)}
+  .fcol{grid-column:span 12}
+  .cart__panel{width:100%}
+  main{padding-bottom:46px}
+}
+@media (prefers-reduced-motion:reduce){
+  *{animation-duration:.01ms !important;animation-iteration-count:1 !important;transition-duration:.01ms !important}
+  html{scroll-behavior:auto}
+}
+</style>
+
+<div class="intro" id="intro">
+  <div class="intro__w" id="introW"></div>
+  <div class="intro__bar"><i></i></div>
+</div>
+
+<div class="cur" id="cur"></div><div class="curdot" id="curdot"></div>
+<div class="grain"></div><div class="vig"></div>
+
+<!-- ============ SPINE ============ -->
+<div class="spine">
+  <a class="spine__mark" href="#top" aria-label="HEARTH — back to top"><i>H</i><i>E</i><i>A</i><i>R</i><i>T</i><i>H</i></a>
+  <div class="spine__track"><div class="spine__fill" id="spineFill"></div></div>
+  <div class="spine__now" id="spineNow">THE ROOM</div>
+  <div class="spine__pct num" id="spinePct">00</div>
+</div>
+
+<!-- ============ FLOATING NAV ============ -->
+<nav class="nav" id="nav" aria-label="Primary">
+  <a href="#cook" data-s="cook">Cook<i>01</i></a>
+  <a href="#discover" data-s="discover">Discover<i>02</i></a>
+  <a href="#appliances" data-s="appliances">Appliances<i>03</i></a>
+  <a href="#story" data-s="story">Our Story<i>04</i></a>
+</nav>
+<div class="util">
+  <button class="ubtn" id="btnSearch" aria-label="Search"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l5 5"/></svg></button>
+  <button class="ubtn" id="btnCart" aria-label="Cart"><svg viewBox="0 0 24 24"><path d="M5.5 8h13l-1.2 11.5H6.7z"/><path d="M9 8V6.4A3 3 0 0 1 15 6.4V8"/></svg><span class="cartdot" id="cartDot">0</span></button>
+  <button class="ubtn ubtn--menu" id="btnMenu">Menu<span class="bars"><span></span><span></span><span></span></span></button>
+</div>
+
+<main id="top">
+
+<!-- ============ HERO ============ -->
+<section class="hero">
+  <div class="room" id="heroShot"></div>
+  <div class="fg"></div>
+
+  <div class="hero__note rv" data-d="4">
+    <span class="hand">Built for real kitchens.</span>
+    <svg viewBox="0 0 80 26" aria-hidden="true"><path d="M3 4c14 12 42 19 74 5" stroke-width="1.3" stroke-linecap="round"/><path d="M69 3c5 4 8 6 8 6s-4 1-9 4" stroke-width="1.3" stroke-linecap="round"/></svg>
+  </div>
+
+  <div class="hero__copy">
+    <div>
+      <p class="lab rv" style="color:rgba(239,231,218,.62)">Hearth &nbsp;/&nbsp; Nairobi &nbsp;/&nbsp; Est. 2014</p>
+      <h1 class="hero__h disp lines">
+        <span><b>MORE THAN</b></span>
+        <span><b><em>a cooker.</em></b></span>
+      </h1>
+      <p class="hero__sub rv" data-d="2">Made for the meals that bring everyone home — the Sunday pilau, the 6am chai, the pot nobody admits they finished.</p>
+      <a class="hero__cta rv" data-d="3" href="#appliances" data-cur="LOOK"><span>Explore Hearth</span><span class="arw">&#8594;</span></a>
+    </div>
+    <div class="hero__meta rv" data-d="4">
+      <div>16:40 &nbsp;EAT</div>
+      <div>Kilimani, Nairobi</div>
+      <div>Gas ring &nbsp;<b>2.2 kPa</b></div>
+      <div>Sufuria &nbsp;<b>No. 24</b></div>
+      <div>Frame &nbsp;<b>001</b></div>
+    </div>
+  </div>
+  <div class="scrollhint"><i></i>Scroll — the pot is on</div>
+</section>
+
+<!-- ============ SECTION 2 ============ -->
+<section class="s2" id="cook">
+  <div class="s2__head">
+    <div>
+      <p class="lab rv">Chapter 01 — Heat</p>
+      <h2 class="s2__h disp lines"><span><b>GOOD FOOD</b></span><span><b><em>starts here.</em></b></span></h2>
+    </div>
+    <p class="s2__aside rv" data-d="2">Not in the plating. Not in the photograph. In the eleven seconds between the knob turning and the blue catching.</p>
+  </div>
+
+  <div class="plates">
+    <figure class="plate p1 rv" data-scene="flame" data-par="0.05"><div class="plate__img"></div>
+      <figcaption><span>The ring, 4.2 kW</span><b>01</b></figcaption></figure>
+    <figure class="plate p2 rv" data-d="1" data-scene="hands" data-par="0.09"><div class="plate__img"></div>
+      <figcaption><span>Onions, cut small — as taught</span><b>02</b></figcaption></figure>
+    <div class="s2__pull rv" data-d="2">
+      <p>We didn't design a cooker.<br>We designed the twenty minutes<br>before dinner.</p>
+      <span class="hand">— the whole brief, honestly</span>
+    </div>
+    <figure class="plate p3 rv" data-scene="steam" data-par="0.04"><div class="plate__img"></div>
+      <figcaption><span>Githeri, hour two</span><b>03</b></figcaption></figure>
+    <figure class="plate p4 rv" data-d="1" data-scene="knob" data-par="0.11"><div class="plate__img"></div>
+      <figcaption><span>Knob, brushed steel</span><b>04</b></figcaption></figure>
+    <figure class="plate p5 rv" data-d="2" data-scene="oven" data-par="0.07"><div class="plate__img"></div>
+      <figcaption><span>Mandazi, 190&deg;C</span><b>05</b></figcaption></figure>
+  </div>
+</section>
+
+<!-- ============ SECTION 3 ============ -->
+<section class="s3" id="appliances">
+  <div class="s3__head">
+    <div>
+      <p class="lab rv">Chapter 02 — Seven objects</p>
+      <h2 class="s3__h disp lines"><span><b>THE COOKER</b></span><span><b><em>edit.</em></b></span></h2>
+    </div>
+    <div class="s3__filters rv" data-d="2" id="filters">
+      <button class="chip on" data-f="all">All seven</button>
+      <button class="chip" data-f="free">Freestanding</button>
+      <button class="chip" data-f="table">Tabletop</button>
+      <button class="chip" data-f="elec">Gas + Electric</button>
+    </div>
+  </div>
+  <div class="edit" id="edit"></div>
+</section>
+
+<!-- ============ SECTION 4 ============ -->
+<section class="s4" id="story">
+  <div class="s4__bed" id="s4bed"></div>
+  <h2 class="s4__h lines" style="--knock:radial-gradient(60% 80% at 20% 30%,#ffc98a,transparent 60%),radial-gradient(50% 70% at 78% 24%,#e8763a,transparent 62%),radial-gradient(70% 90% at 50% 92%,#7a3f1e,transparent 66%),linear-gradient(140deg,#f7d9a8,#c96a2e 42%,#4a2413)">
+    <span><b>FOR THE</b></span><span><b class="knock">PEOPLE</b></span><span><b class="knock">AROUND</b></span><span><b>THE TABLE.</b></span>
+  </h2>
+  <div class="s4__grid">
+    <p class="s4__q rv"><b>Twelve people. One cooker. Nobody sitting where they were told to.</b><br><br>A Hearth spends its life in the middle of an argument about football, a cousin arriving late, and a pot that has to stay warm until he does. We build for that room — not for the one in the brochure.</p>
+    <figure class="s4__f rv" data-d="1" data-scene="table"><span class="s4__cap">Sunday, Kayole</span></figure>
+    <figure class="s4__f2 rv" data-d="2" data-scene="serve"><span class="s4__cap">Chapati, last one</span></figure>
+  </div>
+</section>
+
+<!-- ============ SECTION 5 ============ -->
+<section class="s5" id="discover">
+  <p class="lab rv">Chapter 03 — How it behaves</p>
+  <h2 class="s5__h lines"><span><b>POWER.</b></span><span><b>PRECISION.</b></span><span><b>SIMPLICITY.</b></span></h2>
+  <div class="s5__lay">
+    <div class="s5__main" id="s5main"></div>
+    <div class="s5__side">
+      <div class="knobwrap rv">
+        <div class="knob" id="knob" role="slider" tabindex="0" aria-label="Flame control" aria-valuemin="0" aria-valuemax="10" aria-valuenow="6"></div>
+        <div class="knobinfo">
+          <span class="lab">Try it — drag the knob</span>
+          <strong id="knobLvl">Simmer</strong>
+          <p id="knobTxt">A 270&deg; sweep instead of the usual 180&deg;. Twice the travel, so low heat is somewhere you can actually stop.</p>
+        </div>
+      </div>
+      <div class="spec rv"><span class="spec__k">01</span><div><h3 class="spec__t">Brass burner, cast in one piece</h3><p class="spec__d">Nothing to unscrew, nothing to lose in the sink. 4.2 kW on the wok ring — enough to keep a full sufuria moving.</p></div></div>
+      <div class="spec rv" data-d="1"><span class="spec__k">02</span><div><h3 class="spec__t">Enamel that forgives</h3><p class="spec__d">Double-coated oven cavity. Spilled milk wipes off cold. We tested it with ugali, which is the real standard.</p></div></div>
+      <div class="spec rv" data-d="2"><span class="spec__k">03</span><div><h3 class="spec__t">Flame failure cut-off</h3><p class="spec__d">Gas stops within four seconds of the flame going out — for the draught through an open kitchen door.</p></div></div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ SECTION 6 ============ -->
+<section class="s6">
+  <div class="s6__top">
+    <div style="grid-column:1/span 12"><p class="lab rv">Chapter 04 — Where it lives</p></div>
+    <h2 class="s6__h lines"><span><b>MADE FOR</b></span><span><b><em>Kenyan homes.</em></b></span></h2>
+    <p class="s6__txt rv" data-d="2">Designed in Nairobi against real constraints: a 13kg cylinder in the corner, power that comes and goes, and a kitchen that is also the laundry, the homework desk and the place people stand.</p>
+  </div>
+  <div class="s6__scene" id="s6scene"></div>
+  <div class="s6__facts">
+    <div class="fact rv"><b class="num" data-count="47">0</b><span>Counties we deliver to</span></div>
+    <div class="fact rv" data-d="1"><b class="num" data-count="1795">0</b><span>Metres above sea level<br>— we tune burners for it</span></div>
+    <div class="fact rv" data-d="2"><b class="num" data-count="24">0</b><span>Months warranty, parts in stock</span></div>
+    <div class="fact rv" data-d="3"><b class="num" data-count="13">0</b><span>Kg cylinder — the one you already own</span></div>
+  </div>
+  <div class="ticker"><div class="ticker__in" id="ticker"></div></div>
+</section>
+
+</main>
+
+<!-- ============ FOOTER ============ -->
+<footer class="foot" style="margin-left:var(--spine)">
+  <p class="foot__line disp">Cook well. <em>Live well.</em></p>
+  <div class="foot__cols">
+    <div class="fcol">
+      <h4>Shop</h4>
+      <ul>
+        <li><a href="#appliances">Freestanding cookers</a></li>
+        <li><a href="#appliances">Tabletop hobs</a></li>
+        <li><a href="#appliances">Gas + electric</a></li>
+        <li><a href="#appliances">Spares &amp; burners</a></li>
+      </ul>
+    </div>
+    <div class="fcol">
+      <h4>Support</h4>
+      <ul>
+        <li><a href="#top">Installation &amp; first light</a></li>
+        <li><a href="#top">Warranty — 24 months</a></li>
+        <li><a href="#top">Book a technician</a></li>
+        <li><a href="tel:+254700000000" class="num">+254 700 000 000</a></li>
+      </ul>
+    </div>
+    <div class="fcol">
+      <h4>Find us</h4>
+      <ul>
+        <li>Showroom — Ngong Road</li>
+        <li>Nairobi, Kenya</li>
+        <li class="num">Mon–Sat, 09:00–18:00</li>
+        <li><a href="#top">Stockists, 47 counties</a></li>
+      </ul>
+    </div>
+    <div class="fcol">
+      <h4>Follow / Cart</h4>
+      <ul>
+        <li><a href="#top">Instagram</a></li>
+        <li><a href="#top">TikTok</a></li>
+        <li><a href="#top">Facebook</a></li>
+        <li><a href="#top" id="footCart">Your cart — <span id="footCartN" class="num">0 items</span></a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="wordmark" aria-hidden="true">
+    <svg viewBox="0 0 1000 176" preserveAspectRatio="xMidYMid meet">
+      <text x="500" y="140" text-anchor="middle" font-size="176" textLength="990" lengthAdjust="spacingAndGlyphs" class="solid">HEARTH</text>
+      <text x="500" y="140" text-anchor="middle" font-size="176" textLength="990" lengthAdjust="spacingAndGlyphs" opacity=".45" transform="translate(0,-18)">HEARTH</text>
+    </svg>
+  </div>
+  <div class="foot__base">
+    <span>&copy; 2026 Hearth Appliances Ltd — Nairobi</span>
+    <span>Prices in <b>KES</b>, VAT inclusive</span>
+    <span>Terms &nbsp;/&nbsp; Privacy &nbsp;/&nbsp; Returns</span>
+  </div>
+</footer>
+
+<!-- ============ OVERLAYS ============ -->
+<div class="sheet" id="menuSheet" role="dialog" aria-modal="true" aria-label="Menu">
+  <div class="sheet__scrim" data-close></div>
+  <div class="menu__panel">
+    <ul class="menu__list">
+      <li><a href="#cook" data-close>Cook<sup>01</sup></a></li>
+      <li><a href="#discover" data-close>Discover<sup>02</sup></a></li>
+      <li><a href="#appliances" data-close>Appliances<sup>03</sup></a></li>
+      <li><a href="#story" data-close>Our Story<sup>04</sup></a></li>
+      <li><a href="#top" data-close>Support<sup>05</sup></a></li>
+    </ul>
+    <div class="menu__side">
+      <div><span class="lab">Showroom</span><p>Ngong Road, Nairobi.<br>Open Mon–Sat, 09:00–18:00. The kettle is real.</p></div>
+      <div><span class="lab">Talk to a human</span><p class="num">+254 700 000 000<br>karibu@hearth.co.ke</p></div>
+      <button class="closex" data-close>Close <span aria-hidden="true">&#215;</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="sheet" id="searchSheet" role="dialog" aria-modal="true" aria-label="Search">
+  <div class="sheet__scrim" data-close></div>
+  <div class="search__panel">
+    <div class="search__field">
+      <span class="lab">Search</span>
+      <input id="searchIn" type="search" placeholder="60 by 60, tabletop, 3+1&hellip;" autocomplete="off">
+      <button class="closex" data-close>Close <span aria-hidden="true">&#215;</span></button>
+    </div>
+    <div class="search__hint">
+      <span class="lab">Try</span>
+      <button class="chip" data-q="60x60">60 x 60</button>
+      <button class="chip" data-q="tabletop">Tabletop</button>
+      <button class="chip" data-q="under 5000">Under 5,000</button>
+      <button class="chip" data-q="electric">Electric plate</button>
+    </div>
+    <div class="search__res" id="searchRes"></div>
+  </div>
+</div>
+
+<div class="sheet" id="cartSheet" role="dialog" aria-modal="true" aria-label="Cart">
+  <div class="sheet__scrim" data-close></div>
+  <div class="cart__panel">
+    <div class="cart__head">
+      <h3>Your cart</h3>
+      <button class="closex" data-close>Close <span aria-hidden="true">&#215;</span></button>
+    </div>
+    <div class="cart__body" id="cartBody"></div>
+    <div class="cart__foot">
+      <div class="crow"><span>Subtotal</span><span class="num" id="cSub">KES 0</span></div>
+      <div class="crow"><span>Delivery — Nairobi &amp; environs</span><span class="num" id="cShip">Free</span></div>
+      <div class="crow"><span>Installation &amp; first light</span><span class="num">Included</span></div>
+      <div class="crow tot"><span>Total</span><span class="num" id="cTot">KES 0</span></div>
+      <button class="cbtn" id="checkout"><span>Checkout</span><span aria-hidden="true">&#8594;</span></button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><b id="toastN">1</b><span id="toastT">Added to cart</span></div>
+
+<script>
+document.documentElement.classList.add('js');
+/* registered first: even if everything below throws, the curtain always lifts */
+setTimeout(function(){ var i=document.getElementById('intro');
+  if(i){ i.classList.add('gone'); document.body.classList.remove('locked'); } }, 2600);
+const RM = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const $  = (s,c)=> (c||document).querySelector(s);
+const $$ = (s,c)=> Array.from((c||document).querySelectorAll(s));
+const KES = n => 'KES ' + n.toLocaleString('en-KE');
+
+/* ---------------------------------------------------------------
+   THE CATALOGUE
+   --------------------------------------------------------------- */
+const PRODUCTS = [
+ {id:'roch6060', no:'01', name:'Roch 60 &times; 60', sub:'3 Gas + 1 Electric', price:32500,
+  spec:'60&times;60 &middot; Oven + grill &middot; Black enamel', tag:'The house cooker', cls:'e1',
+  kind:['free','elec'], svg:{type:'free',finish:'black',w:6,burners:4,electric:1,size:1.0}},
+ {id:'rochgas', no:'02', name:'Roch Full Gas', sub:'4 Burner standing', price:18500,
+  spec:'50&times;55 &middot; Gas oven &middot; Ivory', tag:'', cls:'e2',
+  kind:['free'], svg:{type:'free',finish:'ivory',w:4,burners:4,electric:0,size:.86}},
+ {id:'roch3b', no:'03', name:'Roch 3&#8209;Burner', sub:'Tabletop', price:2600,
+  spec:'Tabletop &middot; Enamel pan supports', tag:'Under 3K', cls:'e3',
+  kind:['table'], svg:{type:'table',finish:'black',burners:3,size:.8}},
+ {id:'mika6060', no:'04', name:'Mika 60 &times; 60', sub:'3 Gas + 1 Electric', price:37500,
+  spec:'60&times;60 &middot; Fan oven &middot; Inox', tag:'Editor&rsquo;s pick', cls:'e4',
+  kind:['free','elec'], svg:{type:'free',finish:'steel',w:6,burners:4,electric:1,size:1.0}},
+ {id:'ss3b', no:'05', name:'Stainless 3&#8209;Burner', sub:'Tabletop', price:3000,
+  spec:'Tabletop &middot; Brushed steel top', tag:'', cls:'e5',
+  kind:['table'], svg:{type:'table',finish:'steel',burners:3,size:.8}},
+ {id:'amaze31', no:'06', name:'Amaze 3+1', sub:'Standing cooker', price:19500,
+  spec:'50&times;55 &middot; Gas oven &middot; Hotplate', tag:'', cls:'e6',
+  kind:['free','elec'], svg:{type:'free',finish:'black',w:4,burners:4,electric:1,size:.9}},
+ {id:'euroken31', no:'07', name:'Euroken 3+1', sub:'Standing cooker', price:21500,
+  spec:'50&times;55 &middot; Rotisserie &middot; Inox', tag:'', cls:'e7',
+  kind:['free','elec'], svg:{type:'free',finish:'steel',w:4,burners:4,electric:1,size:.9}}
+];
+
+/* ---------------------------------------------------------------
+   COOKER DRAWINGS — built, not stock. Straight-on elevation with a
+   shallow top plane, the way a catalogue photographer would shoot it.
+   --------------------------------------------------------------- */
+const FIN = {
+  black:{body:'#1d1a17',bodyB:'#0e0c0a',top:'#26221e',topB:'#15120f',edge:'#4a423a',glass:'#0a0908',knob:'#c9c2b8',txt:'#EFE7DA'},
+  steel:{body:'#b9b4ac',bodyB:'#827d76',top:'#cfcac2',topB:'#9a958d',edge:'#efeae2',glass:'#12100e',knob:'#3a352f',txt:'#2a241d'},
+  ivory:{body:'#e6ded0',bodyB:'#bdb3a2',top:'#efe8dc',topB:'#c8bfae',edge:'#fffaf1',glass:'#14120f',knob:'#3a352f',txt:'#2a241d'}
+};
+let UID = 0;
+function burner(cx,cy,rx,ry,lit,brass){
+  const b = brass||'#8a6a3a';
+  return `<g>
+    <ellipse cx="${cx}" cy="${cy+2}" rx="${rx}" ry="${ry}" fill="rgba(0,0,0,.35)"/>
+    <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="${b}" opacity=".85"/>
+    <ellipse cx="${cx}" cy="${cy}" rx="${rx*.68}" ry="${ry*.68}" fill="#2b2620"/>
+    <ellipse cx="${cx}" cy="${cy}" rx="${rx*.3}" ry="${ry*.3}" fill="#171310"/>
+    <path d="M${cx-rx-4} ${cy} h${rx*2+8} M${cx} ${cy-ry-3} v${ry*2+6}" stroke="#171310" stroke-width="3" stroke-linecap="round" opacity=".9"/>
+    <path d="M${cx-rx*.75} ${cy-ry*.75} l${rx*1.5} ${ry*1.5} M${cx+rx*.75} ${cy-ry*.75} l${-rx*1.5} ${ry*1.5}" stroke="#171310" stroke-width="2.4" stroke-linecap="round" opacity=".75"/>
+    ${lit?`<g class="flame"><ellipse cx="${cx}" cy="${cy}" rx="${rx*.8}" ry="${ry*.8}" fill="#2B5CE6" opacity=".55"/>
+      <ellipse cx="${cx}" cy="${cy}" rx="${rx*.5}" ry="${ry*.5}" fill="#7FB2FF" opacity=".7"/></g>`:''}
+  </g>`;
+}
+function hotplate(cx,cy,rx,ry){
+  return `<g>
+    <ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="#2a2520"/>
+    <ellipse cx="${cx}" cy="${cy-1}" rx="${rx*.92}" ry="${ry*.92}" fill="#3b342c"/>
+    ${[.72,.5,.28].map(f=>`<ellipse cx="${cx}" cy="${cy-1}" rx="${rx*f}" ry="${ry*f}" fill="none" stroke="#1b1714" stroke-width="2"/>`).join('')}
+    <ellipse cx="${cx}" cy="${cy-1}" rx="${rx*.1}" ry="${ry*.1}" fill="#1b1714"/></g>`;
+}
+function knobShape(x,y,r,f){
+  return `<g><circle cx="${x}" cy="${y}" r="${r}" fill="${f.knob}" opacity=".9"/>
+    <circle cx="${x}" cy="${y}" r="${r*.72}" fill="none" stroke="rgba(0,0,0,.35)" stroke-width="1"/>
+    <path d="M${x} ${y-r*.2} V${y-r*.85}" stroke="rgba(0,0,0,.6)" stroke-width="2" stroke-linecap="round"/></g>`;
+}
+function cooker(cfg){
+  const f = FIN[cfg.finish]||FIN.black, id = 'g'+(++UID);
+  if(cfg.type==='table'){
+    return `<svg viewBox="0 0 320 152" role="img" aria-label="Hearth tabletop cooker">
+      <defs><linearGradient id="${id}a" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="${f.top}"/><stop offset="1" stop-color="${f.topB}"/></linearGradient>
+        <linearGradient id="${id}b" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="${f.body}"/><stop offset="1" stop-color="${f.bodyB}"/></linearGradient></defs>
+      <ellipse cx="160" cy="142" rx="132" ry="8" fill="rgba(20,17,14,.22)"/>
+      <path d="M44 30 H276 L300 74 H20 Z" fill="url(#${id}a)"/>
+      <path d="M44 30 H276 L280 37 H40 Z" fill="${f.edge}" opacity=".5"/>
+      <rect x="20" y="74" width="280" height="46" fill="url(#${id}b)"/>
+      <rect x="20" y="74" width="280" height="3" fill="${f.edge}" opacity=".55"/>
+      ${burner(90,52,30,13,false)}${burner(160,52,34,15,true)}${burner(232,52,30,13,false)}
+      ${knobShape(92,97,13,f)}${knobShape(160,97,13,f)}${knobShape(228,97,13,f)}
+      <rect x="26" y="120" width="12" height="9" rx="2" fill="#15120f"/>
+      <rect x="282" y="120" width="12" height="9" rx="2" fill="#15120f"/>
+      <text x="160" y="129" text-anchor="middle" font-family="Archivo,sans-serif" font-size="7" letter-spacing="3.4" fill="${f.txt}" opacity=".5">HEARTH</text>
+    </svg>`;
+  }
+  const lit = cfg.lit!==false;
+  return `<svg viewBox="0 0 320 424" role="img" aria-label="Hearth freestanding cooker">
+    <defs>
+      <linearGradient id="${id}a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${f.top}"/><stop offset="1" stop-color="${f.topB}"/></linearGradient>
+      <linearGradient id="${id}b" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0" stop-color="${f.bodyB}"/><stop offset=".22" stop-color="${f.body}"/>
+        <stop offset=".62" stop-color="${f.body}"/><stop offset="1" stop-color="${f.bodyB}"/></linearGradient>
+      <linearGradient id="${id}c" x1="0" y1="0" x2=".7" y2="1">
+        <stop offset="0" stop-color="#3b342c" stop-opacity=".95"/><stop offset=".45" stop-color="${f.glass}"/>
+        <stop offset="1" stop-color="#050403"/></linearGradient>
+      <linearGradient id="${id}d" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0" stop-color="#ffd9a3" stop-opacity=".30"/><stop offset="1" stop-color="#ffd9a3" stop-opacity="0"/></linearGradient>
+    </defs>
+    <ellipse cx="160" cy="410" rx="140" ry="9" fill="rgba(20,17,14,.25)"/>
+    <!-- back riser -->
+    <rect x="46" y="38" width="228" height="34" rx="3" fill="${f.bodyB}"/>
+    <rect x="46" y="38" width="228" height="4" fill="${f.edge}" opacity=".5"/>
+    <text x="160" y="61" text-anchor="middle" font-family="Archivo,sans-serif" font-size="9" font-weight="800" letter-spacing="6" fill="${f.txt}" opacity=".62">HEARTH</text>
+    <!-- hob plane -->
+    <path d="M48 72 H272 L296 120 H24 Z" fill="url(#${id}a)"/>
+    <path d="M48 72 H272 L275 79 H45 Z" fill="${f.edge}" opacity=".45"/>
+    ${burner(106,92,26,11,lit)}
+    ${cfg.electric? hotplate(214,92,26,11) : burner(214,92,26,11,false)}
+    ${burner(86,112,30,13,false)}
+    ${burner(236,112,30,13,false)}
+    <!-- body -->
+    <rect x="24" y="120" width="272" height="258" fill="url(#${id}b)"/>
+    <rect x="24" y="120" width="272" height="3" fill="${f.edge}" opacity=".6"/>
+    <!-- control fascia -->
+    <rect x="24" y="126" width="272" height="40" fill="rgba(0,0,0,.18)"/>
+    ${[70,110,150,210,250].slice(0,cfg.w===6?5:4).map((x,i)=>knobShape(x,146,12,f)).join('')}
+    <circle cx="288" cy="146" r="3" fill="#E86A2A" opacity=".9"/>
+    <!-- oven door -->
+    <rect x="34" y="176" width="252" height="176" rx="2" fill="rgba(0,0,0,.14)"/>
+    <rect x="40" y="182" width="240" height="164" rx="2" fill="url(#${id}c)"/>
+    <rect x="52" y="194" width="216" height="140" rx="1" fill="none" stroke="rgba(255,255,255,.1)"/>
+    <path d="M52 194 L268 334" stroke="rgba(255,255,255,.055)" stroke-width="26"/>
+    <rect x="52" y="230" width="216" height="104" fill="url(#${id}d)"/>
+    <!-- handle -->
+    <rect x="32" y="168" width="256" height="9" rx="4.5" fill="${f.edge}" opacity=".92"/>
+    <rect x="32" y="168" width="256" height="3" rx="1.5" fill="#fff" opacity=".28"/>
+    <rect x="44" y="177" width="9" height="9" fill="${f.bodyB}"/><rect x="267" y="177" width="9" height="9" fill="${f.bodyB}"/>
+    <!-- plinth + feet -->
+    <rect x="24" y="360" width="272" height="18" fill="rgba(0,0,0,.3)"/>
+    <rect x="34" y="378" width="16" height="16" rx="3" fill="#15120f"/>
+    <rect x="270" y="378" width="16" height="16" rx="3" fill="#15120f"/>
+  </svg>`;
+}
+
+/* ---------------------------------------------------------------
+   SCENES — every "photograph" on this page is drawn in layers:
+   ground, light, subject, spill, grain. Same as lighting a set.
+   --------------------------------------------------------------- */
+function jets(cx,cy,r,n,len){
+  let o='';
+  for(let i=0;i<n;i++){
+    const a=(i/n)*360;
+    o+=`<g transform="rotate(${a} ${cx} ${cy})" class="flame${i%2?' flame--b':''}" style="transform-origin:${cx}px ${cy}px">
+      <path d="M${cx} ${cy-r} q ${len*.32} ${-len*.5} 0 ${-len} q ${-len*.32} ${len*.5} 0 ${len} z" fill="#2B5CE6" opacity=".92"/>
+      <path d="M${cx} ${cy-r-2} q ${len*.18} ${-len*.3} 0 ${-len*.6} q ${-len*.18} ${len*.3} 0 ${len*.6} z" fill="#9CC8FF" opacity=".95"/>
+      <path d="M${cx} ${cy-r-len*.86} q ${len*.1} ${-len*.16} 0 ${-len*.3} q ${-len*.1} ${len*.16} 0 ${len*.3} z" fill="#FFB25E" opacity=".75"/>
+    </g>`;
+  }
+  return o;
+}
+function steamEls(n,left,bottom,w){
+  let o=`<div class="steam" style="left:${left};bottom:${bottom};width:${w};height:10px">`;
+  for(let i=0;i<n;i++) o+=`<i style="left:${(i/n*100).toFixed(0)}%;--dx:${(Math.random()*44-22).toFixed(0)}px;animation-delay:${(i*.62).toFixed(2)}s;animation-duration:${(4.4+Math.random()*2.2).toFixed(1)}s"></i>`;
+  return o+'</div>';
+}
+const SCENES = {
+  flame(){ return `
+    <div style="position:absolute;inset:0;background:radial-gradient(58% 58% at 50% 56%,#16294f 0%,#0a1020 52%,#050607 100%)"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(30% 30% at 50% 56%,rgba(43,92,230,.55),transparent 70%);filter:blur(22px)"></div>
+    <svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+      <ellipse cx="100" cy="112" rx="70" ry="66" fill="#0d0f14"/>
+      <ellipse cx="100" cy="112" rx="56" ry="53" fill="#1a1613"/>
+      <ellipse cx="100" cy="112" rx="46" ry="43" fill="#8a6a3a" opacity=".55"/>
+      <ellipse cx="100" cy="112" rx="34" ry="32" fill="#211c17"/>
+      ${jets(100,112,34,20,26)}
+      <ellipse cx="100" cy="112" rx="15" ry="14" fill="#0e0c0a"/>
+      <ellipse cx="100" cy="112" rx="15" ry="14" fill="#2B5CE6" opacity=".35"/>
+    </svg>
+    <div style="position:absolute;inset:0;background:linear-gradient(200deg,rgba(255,220,180,.07),transparent 40%)"></div>`; },
+
+  hands(){ return `
+    <div style="position:absolute;inset:0;background:linear-gradient(165deg,#c9955f 0%,#8a5c36 44%,#33210f 100%)"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(48% 62% at 72% 8%,rgba(255,231,190,.85),transparent 62%)"></div>
+    <svg viewBox="0 0 400 250" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+      <rect x="54" y="118" width="292" height="104" rx="6" fill="#d2a26a"/>
+      <rect x="54" y="118" width="292" height="104" rx="6" fill="url(#bd)" opacity=".5"/>
+      <defs><linearGradient id="bd" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".35"/><stop offset="1" stop-color="#000" stop-opacity=".4"/></linearGradient></defs>
+      <g opacity=".22">${[0,1,2,3,4,5].map(i=>`<path d="M${60+i*50} 118 V222" stroke="#6b431f" stroke-width="1.5"/>`).join('')}</g>
+      <g fill="#f2e4cd">${[0,1,2].map(i=>`<ellipse cx="${150+i*46}" cy="${176+(i%2?6:-4)}" rx="21" ry="8"/>`).join('')}</g>
+      <g fill="none" stroke="#c9b493" stroke-width="1.2">${[0,1,2].map(i=>`<ellipse cx="${150+i*46}" cy="${176+(i%2?6:-4)}" rx="13" ry="5"/><ellipse cx="${150+i*46}" cy="${176+(i%2?6:-4)}" rx="6" ry="2.4"/>`).join('')}</g>
+      <path d="M262 150 l86 -34 6 12 -84 36 z" fill="#2b2620"/>
+      <path d="M340 112 l30 -12 8 15 -30 12 z" fill="#4a3a28"/>
+      <!-- hands, silhouetted against the light -->
+      <path d="M96 250 C88 206 96 180 118 166 c14 -9 24 -4 26 6 3 -12 14 -14 20 -5 5 -10 16 -9 19 2 6 -7 15 -3 14 9 -2 18 -10 34 -26 44 -14 9 -20 17 -22 28 z" fill="#241708" opacity=".96"/>
+      <path d="M284 250 c-10 -38 -2 -62 20 -72 12 -6 22 -1 24 8 4 -11 15 -12 20 -3 5 -9 15 -7 17 4 5 -6 13 -1 11 10 -4 20 -13 34 -29 42 -12 6 -18 12 -20 21 z" fill="#1d1307" opacity=".92" transform="translate(-6,0)"/>
+    </svg>
+    <div style="position:absolute;inset:0;background:radial-gradient(70% 70% at 30% 80%,transparent,rgba(20,12,4,.55))"></div>`; },
+
+  steam(){ return `
+    <div style="position:absolute;inset:0;background:linear-gradient(180deg,#0f0d0b 0%,#1c1712 52%,#080706 100%)"></div>
+    <div style="position:absolute;left:50%;top:18%;width:64%;height:56%;transform:translateX(-50%);
+      background:radial-gradient(closest-side,rgba(255,206,146,.36),transparent);filter:blur(10px)"></div>
+    ${steamEls(9,'26%','36%','48%')}
+    <svg viewBox="0 0 200 200" preserveAspectRatio="xMidYMax slice" style="position:absolute;inset:0;width:100%;height:100%">
+      <path d="M46 132 h108 l-7 52 a47 12 0 0 1 -94 0 z" fill="#6f6a62"/>
+      <path d="M46 132 h108 l-3 20 H49 z" fill="#8e887f"/>
+      <ellipse cx="100" cy="132" rx="54" ry="14" fill="#b4ada2"/>
+      <ellipse cx="100" cy="132" rx="45" ry="11" fill="#2a251f"/>
+      <ellipse cx="100" cy="131" rx="45" ry="11" fill="#c78a3e" opacity=".5"/>
+      <path d="M40 140 q-12 6 -2 14" stroke="#8e887f" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <path d="M160 140 q12 6 2 14" stroke="#8e887f" stroke-width="5" fill="none" stroke-linecap="round"/>
+      <rect x="0" y="182" width="200" height="18" fill="#0a0806"/>
+    </svg>
+    <div style="position:absolute;inset:0;background:radial-gradient(60% 60% at 50% 46%,transparent,rgba(6,5,4,.7))"></div>`; },
+
+  knob(){ return `
+    <div style="position:absolute;inset:0;background:linear-gradient(150deg,#3b342c,#15120f 70%)"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(40% 40% at 26% 14%,rgba(255,226,184,.5),transparent 60%)"></div>
+    <div style="position:absolute;left:50%;top:52%;width:62%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
+      background:conic-gradient(from 0deg,#8e8880,#e9e3da 12%,#7d766e 26%,#dcd5cb 42%,#6e6760 58%,#e5ded4 74%,#847d75 88%,#8e8880);
+      box-shadow:0 22px 40px rgba(0,0,0,.6),inset 0 0 0 1px rgba(255,255,255,.35)"></div>
+    <div style="position:absolute;left:50%;top:52%;width:40%;aspect-ratio:1;transform:translate(-50%,-50%);border-radius:50%;
+      background:radial-gradient(60% 60% at 34% 26%,#4b443c,#1b1714);box-shadow:inset 0 2px 6px rgba(255,255,255,.18)"></div>
+    <div style="position:absolute;left:50%;top:52%;width:3px;height:17%;transform:translate(-50%,-100%) rotate(-38deg);transform-origin:50% 100%;
+      background:#EFE7DA;border-radius:2px"></div>
+    <div style="position:absolute;left:8%;top:14%;font-size:9px;letter-spacing:.2em;color:rgba(239,231,218,.55)">MIN</div>
+    <div style="position:absolute;right:8%;top:14%;font-size:9px;letter-spacing:.2em;color:#7FB2FF">MAX</div>
+    <div style="position:absolute;inset:0;background:linear-gradient(20deg,rgba(0,0,0,.6),transparent 55%)"></div>`; },
+
+  oven(){ return `
+    <div style="position:absolute;inset:0;background:radial-gradient(70% 58% at 50% 86%,#e2913c 0%,#8a4a18 34%,#2a1608 68%,#0c0705 100%)"></div>
+    <svg viewBox="0 0 220 260" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+      <rect x="0" y="0" width="220" height="86" fill="#0a0705"/>
+      <g stroke="#1b120a" stroke-width="3" opacity=".8">${[0,1,2,3,4,5,6,7].map(i=>`<path d="M24 ${150+i*0} "/>`).join('')}</g>
+      <rect x="22" y="168" width="176" height="7" rx="3" fill="#2a2018"/>
+      <g stroke="#3a2c1f" stroke-width="2.6">${[0,1,2,3,4,5,6].map(i=>`<path d="M${30+i*27} 168 V196"/>`).join('')}</g>
+      <rect x="28" y="150" width="164" height="20" rx="3" fill="#5a4630"/>
+      ${[0,1,2,3].map(i=>`<g><ellipse cx="${52+i*38}" cy="${148}" rx="17" ry="11" fill="#c98d45"/>
+        <ellipse cx="${52+i*38}" cy="${145}" rx="17" ry="11" fill="#e6b163"/>
+        <ellipse cx="${47+i*38}" cy="${141}" rx="6" ry="3.4" fill="#f6d79c" opacity=".7"/></g>`).join('')}
+      <rect x="0" y="216" width="220" height="44" fill="#120b06"/>
+    </svg>
+    <div style="position:absolute;inset:0;box-shadow:inset 0 0 70px rgba(10,5,2,.9)"></div>`; },
+
+  table(){ return `
+    <div style="position:absolute;inset:0;background:linear-gradient(170deg,#7d5232,#3a2314 62%,#150c06)"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(44% 34% at 50% 28%,rgba(255,214,158,.75),transparent 66%)"></div>
+    <svg viewBox="0 0 240 320" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+      <ellipse cx="120" cy="196" rx="126" ry="86" fill="#5d3c22"/>
+      <ellipse cx="120" cy="192" rx="120" ry="80" fill="#8a5c34"/>
+      <ellipse cx="120" cy="186" rx="44" ry="26" fill="#e8dcc6"/>
+      <ellipse cx="120" cy="184" rx="34" ry="19" fill="#b8763a"/>
+      ${[[48,150],[196,158],[62,236],[182,232],[120,258]].map(p=>`<g><ellipse cx="${p[0]}" cy="${p[1]}" rx="27" ry="15" fill="#efe7da"/><ellipse cx="${p[0]}" cy="${p[1]-1}" rx="18" ry="9.5" fill="#c98c4e"/></g>`).join('')}
+      <g fill="#1b1006" opacity=".92">
+        <path d="M-6 300 c14 -44 30 -66 58 -74 16 -5 26 2 27 12 2 -12 14 -13 18 -3 4 -9 14 -8 16 3 4 -6 11 -1 9 9 -4 22 -18 36 -40 42 -18 5 -28 12 -33 25 z"/>
+        <path d="M246 306 c-16 -46 -34 -68 -62 -74 -16 -3 -25 4 -25 14 -3 -12 -15 -12 -18 -1 -5 -9 -14 -7 -15 4 -5 -6 -11 0 -8 10 6 22 20 35 42 40 18 4 28 11 32 24 z"/>
+      </g>
+      <path d="M0 0 h240 v58 H0 z" fill="#0d0805" opacity=".55"/>
+    </svg>
+    <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(10,6,3,.8),transparent 46%)"></div>`; },
+
+  serve(){ return `
+    <div style="position:absolute;inset:0;background:linear-gradient(140deg,#a76a38,#4b2c15 58%,#160d06)"></div>
+    <div style="position:absolute;inset:0;background:radial-gradient(40% 44% at 76% 16%,rgba(255,226,180,.8),transparent 64%)"></div>
+    <svg viewBox="0 0 220 220" preserveAspectRatio="xMidYMid slice" style="position:absolute;inset:0;width:100%;height:100%">
+      <ellipse cx="112" cy="118" rx="62" ry="24" fill="#e7c184"/>
+      <ellipse cx="112" cy="114" rx="62" ry="24" fill="#f0d29e"/>
+      <g fill="#c99552" opacity=".65">${[0,1,2,3,4].map(i=>`<ellipse cx="${80+i*17}" cy="${110+(i%2?6:-4)}" rx="7" ry="3"/>`).join('')}</g>
+      <path d="M-10 230 c10 -56 34 -84 66 -92 18 -4 28 4 28 15 3 -13 16 -14 20 -3 5 -10 15 -8 17 4 5 -7 13 -1 10 11 -6 25 -22 40 -46 46 -20 5 -31 14 -36 28 z" fill="#1d1107"/>
+      <path d="M232 236 c-14 -54 -38 -80 -70 -86 -18 -3 -27 5 -27 16 -4 -12 -16 -12 -19 -1 -6 -9 -16 -6 -17 6 -6 -6 -13 1 -9 12 8 24 24 38 48 43 20 4 31 12 35 26 z" fill="#150c05"/>
+    </svg>
+    <div style="position:absolute;inset:0;background:radial-gradient(60% 60% at 50% 50%,transparent,rgba(12,7,3,.62))"></div>`; }
+};
+
+/* ---------------------------------------------------------------
+   BUILD THE PAGE
+   --------------------------------------------------------------- */
+/* plates + section-4 stills */
+$$('[data-scene]').forEach(el=>{
+  const s = SCENES[el.dataset.scene]; if(!s) return;
+  const host = $('.plate__img',el) || el;
+  host.insertAdjacentHTML('afterbegin', s());
+});
+
+/* ---- products ---- */
+/* storage can throw (private windows, blocked site data, thumbnailing) — never let it take the page down */
+const store = {
+  get(k){ try{ return localStorage.getItem(k); }catch(e){ return null; } },
+  set(k,v){ try{ localStorage.setItem(k,v); }catch(e){} },
+  ses(k){ try{ return sessionStorage.getItem(k); }catch(e){ return null; } },
+  sesSet(k,v){ try{ sessionStorage.setItem(k,v); }catch(e){} }
+};
+let cart = {};
+try{ cart = JSON.parse(store.get('hearth.cart')||'{}') || {}; }catch(e){ cart = {}; }
+function prodCard(p){
+  return `<article class="prod rv ${p.cls}" data-id="${p.id}" data-kind="${p.kind.join(' ')}">
+    <div class="prod__stage" style="--s:${p.svg.size}">
+      <span class="prod__no num">${p.no}</span>${p.tag?`<span class="prod__tag">${p.tag}</span>`:''}
+      <div style="width:${Math.round(p.svg.size*100)}%">${cooker(p.svg)}</div>
+    </div>
+    <div class="prod__meta">
+      <div><h3 class="prod__name">${p.name}</h3><div class="prod__spec">${p.spec}</div></div>
+      <div class="prod__price"><span class="cur">KES</span><span class="val">${p.price.toLocaleString('en-KE')}</span></div>
+    </div>
+    <div class="prod__buy">
+      <button class="addbtn" data-add="${p.id}" data-cur="ADD"><span>Add to cart</span><span aria-hidden="true">&#43;</span></button>
+      <div class="stepper"><button data-q="-1" aria-label="Fewer">&minus;</button><var>1</var><button data-q="1" aria-label="More">&plus;</button></div>
+    </div>
+  </article>`;
+}
+$('#edit').innerHTML = PRODUCTS.map(prodCard).join('') +
+  `<div class="editnote rv"><p>Seven cookers. One idea:<br>the heat should do what your hand just asked it to.</p><span class="hand">Photographed in Nairobi, dry season.</span></div>`;
+
+/* ---- cart ---- */
+function saveCart(){ store.set('hearth.cart', JSON.stringify(cart)); }
+function cartCount(){ return Object.values(cart).reduce((a,b)=>a+b,0); }
+function cartTotal(){ return Object.entries(cart).reduce((a,[id,q])=> a + (PRODUCTS.find(p=>p.id===id).price*q), 0); }
+function strip(h){ const d=document.createElement('div'); d.innerHTML=h; return d.textContent; }
+function renderCart(){
+  const n = cartCount();
+  $('#cartDot').textContent = n; $('#cartDot').classList.toggle('show', n>0);
+  $('#footCartN').textContent = n===1 ? '1 item' : n+' items';
+  const body = $('#cartBody');
+  if(!n){ body.innerHTML = `<p class="cart__empty">Nothing in here yet.<br>The <a href="#appliances" data-close style="border-bottom:1px solid currentColor">cooker edit</a> is one scroll away.</p>`; }
+  else{
+    body.innerHTML = Object.entries(cart).map(([id,q])=>{
+      const p = PRODUCTS.find(x=>x.id===id);
+      return `<div class="citem">
+        <div>${cooker(Object.assign({},p.svg,{lit:false}))}</div>
+        <div><h5>${p.name}</h5><div class="prod__spec">${p.sub} &middot; &times;${q}</div></div>
+        <div class="citem__r"><span class="num">${KES(p.price*q)}</span><button class="citem__x" data-rm="${id}">Remove</button></div>
+      </div>`;
+    }).join('');
+  }
+  const sub = cartTotal();
+  $('#cSub').textContent = KES(sub);
+  $('#cShip').textContent = sub>0 && sub<5000 ? KES(450) : 'Free';
+  $('#cTot').textContent = KES(sub + (sub>0 && sub<5000 ? 450 : 0));
+  saveCart();
+}
+let toastT;
+function toast(msg,n){
+  $('#toastN').textContent = n; $('#toastT').innerHTML = msg;
+  $('#toast').classList.add('show'); clearTimeout(toastT);
+  toastT = setTimeout(()=>$('#toast').classList.remove('show'), 2600);
+}
+document.addEventListener('click', e=>{
+  const step = e.target.closest('[data-q]');
+  if(step){ const v = $('var', step.parentElement); v.textContent = Math.max(1, Math.min(9, +v.textContent + +step.dataset.q)); return; }
+  const add = e.target.closest('[data-add]');
+  if(add){
+    const id = add.dataset.add, card = add.closest('.prod');
+    const q = +$('.stepper var', card).textContent;
+    cart[id] = (cart[id]||0) + q; renderCart();
+    add.classList.add('done'); $('span', add).textContent = 'In the cart';
+    toast(strip(PRODUCTS.find(p=>p.id===id).name) + ' &mdash; added', q);
+    setTimeout(()=>{ add.classList.remove('done'); $('span', add).textContent = 'Add to cart'; }, 1900);
+    return;
+  }
+  const rm = e.target.closest('[data-rm]');
+  if(rm){ delete cart[rm.dataset.rm]; renderCart(); return; }
+});
+renderCart();
+
+/* ---- filters ---- */
+$('#filters').addEventListener('click', e=>{
+  const b = e.target.closest('.chip'); if(!b) return;
+  $$('#filters .chip').forEach(c=>c.classList.toggle('on', c===b));
+  const f = b.dataset.f;
+  $$('#edit .prod').forEach(p => p.classList.toggle('dim', f!=='all' && !p.dataset.kind.split(' ').includes(f)));
+});
+
+/* ---- sheets ---- */
+function openSheet(el){ $$('.sheet').forEach(s=>s.classList.remove('open')); el.classList.add('open'); document.body.classList.add('locked'); }
+function closeSheets(){ $$('.sheet').forEach(s=>s.classList.remove('open')); document.body.classList.remove('locked'); }
+$('#btnMenu').onclick = ()=> openSheet($('#menuSheet'));
+$('#btnCart').onclick = ()=> openSheet($('#cartSheet'));
+$('#footCart').onclick = e=>{ e.preventDefault(); openSheet($('#cartSheet')); };
+$('#btnSearch').onclick = ()=>{ openSheet($('#searchSheet')); setTimeout(()=>$('#searchIn').focus(), 420); };
+document.addEventListener('click', e=>{ if(e.target.closest('[data-close]')) closeSheets(); });
+document.addEventListener('keydown', e=>{ if(e.key==='Escape') closeSheets(); });
+$('#checkout').onclick = ()=>{ if(!cartCount()) return toast('Cart is empty','0');
+  toast('Checkout is a demo &mdash; nothing was charged', cartCount()); };
+
+/* ---- search ---- */
+function runSearch(q){
+  q = (q||'').trim().toLowerCase();
+  const under = q.match(/under\s*([\d,]+)/);
+  const cap = under ? +under[1].replace(/,/g,'') : null;
+  const hits = PRODUCTS.filter(p=>{
+    if(cap) return p.price <= cap;
+    if(!q) return true;
+    const hay = (strip(p.name)+' '+p.sub+' '+strip(p.spec)+' '+p.kind.join(' ')+' '+p.price).toLowerCase()
+      .replace(/×/g,'x').replace(/\s/g,'');
+    return hay.includes(q.replace(/\s/g,'').replace(/×/g,'x'));
+  });
+  $('#searchRes').innerHTML = hits.length ? hits.map(p=>`
+    <button class="sres" data-goto="${p.id}">${cooker(Object.assign({},p.svg,{lit:false}))}
+      <b>${p.name}</b><i>${p.sub} &middot; ${KES(p.price)}</i></button>`).join('')
+    : `<p class="cart__empty">No cooker matches &ldquo;${q}&rdquo;. Try <b>tabletop</b>, <b>60x60</b> or <b>under 5000</b>.</p>`;
+}
+$('#searchIn').addEventListener('input', e=>runSearch(e.target.value));
+$$('.search__hint .chip').forEach(c=> c.onclick = ()=>{ $('#searchIn').value = c.dataset.q; runSearch(c.dataset.q); });
+$('#searchRes').addEventListener('click', e=>{
+  const b = e.target.closest('[data-goto]'); if(!b) return;
+  closeSheets();
+  const card = $(`.prod[data-id="${b.dataset.goto}"]`);
+  card.scrollIntoView({behavior: RM?'auto':'smooth', block:'center'});
+  card.animate([{filter:'none'},{filter:'brightness(1.12)'},{filter:'none'}],{duration:1100});
+});
+runSearch('');
+
+/* ---- section 5: macro burner + drawn annotations + live knob ---- */
+$('#s5main').innerHTML = SCENES.flame() + `
+  <div class="ann ann--l" style="left:6%;top:22%">Brass crown &mdash; <i>one casting</i></div>
+  <div class="ann ann--r" style="right:6%;top:38%;text-align:right"><i>20</i> ports, laser-cut</div>
+  <div class="ann ann--l" style="left:6%;bottom:22%">Flame failure device &mdash; <i>4s</i></div>
+  <div class="ann ann--r" style="right:6%;bottom:14%;text-align:right">Output <i>4.2 kW</i></div>
+  <div style="position:absolute;left:14px;bottom:12px;font-size:9px;letter-spacing:.2em;color:rgba(239,231,218,.45)">PLATE 06 &mdash; WOK RING, FULL</div>`;
+const s5flames = $('#s5main svg');
+const LEVELS = [
+  ['Off','Gas closed. The click you hear is the valve seating.'],
+  ['Warm','Just enough to hold a pot of chai where you left it.'],
+  ['Low','For milk, which will escape the moment you look away.'],
+  ['Simmer','A 270&deg; sweep instead of the usual 180&deg;. Twice the travel, so low heat is somewhere you can actually stop.'],
+  ['Medium','Where onions go soft without going brown.'],
+  ['Medium+','Chapati heat. The pan should hiss, not smoke.'],
+  ['High','Full 4.2 kW on the wok ring &mdash; a loaded sufuria keeps moving.']
+];
+let kv = 3;
+function setKnob(v){
+  kv = Math.max(0, Math.min(6, v));
+  const deg = -135 + (kv/6)*270;
+  $('#knob .knob__rot').style.transform = `rotate(${deg}deg)`;
+  $('#knobLvl').textContent = LEVELS[kv][0];
+  $('#knobTxt').innerHTML = LEVELS[kv][1];
+  $('#knob').setAttribute('aria-valuenow', kv);
+  if(s5flames){ s5flames.style.setProperty('--f', kv/6);
+    s5flames.querySelectorAll('.flame').forEach(g=>{ g.style.opacity = kv===0?0:(.35+kv/6*.65); g.style.scale = (.42+kv/6*.58).toFixed(2); }); }
+}
+$('#knob').innerHTML = `<svg viewBox="0 0 100 100">
+  <circle cx="50" cy="50" r="48" fill="none" stroke="rgba(239,231,218,.18)" stroke-width="1"/>
+  ${[0,1,2,3,4,5,6].map(i=>{const a=(-135+i/6*270)*Math.PI/180;const x1=50+Math.sin(a)*44,y1=50-Math.cos(a)*44,x2=50+Math.sin(a)*39,y2=50-Math.cos(a)*39;
+    return `<path d="M${x1.toFixed(1)} ${y1.toFixed(1)} L${x2.toFixed(1)} ${y2.toFixed(1)}" stroke="${i===0?'#8A7F72':'#7FB2FF'}" stroke-width="1.4" opacity="${i===0?.6:.45+i*.09}"/>`;}).join('')}
+  <g class="knob__rot">
+    <circle cx="50" cy="50" r="31" fill="#2f2a24" stroke="rgba(239,231,218,.3)"/>
+    <circle cx="50" cy="50" r="24" fill="#413a32"/>
+    <path d="M50 30 V19" stroke="#EFE7DA" stroke-width="3" stroke-linecap="round"/>
+    <path d="M38 62 q12 -8 24 0" stroke="rgba(239,231,218,.25)" fill="none" stroke-width="2"/>
+  </g></svg>`;
+setKnob(3);
+(function knobDrag(){
+  const k = $('#knob'); let on=false;
+  const from = e=>{ const r=k.getBoundingClientRect(), x=(e.touches?e.touches[0].clientX:e.clientX)-r.left-r.width/2,
+    y=(e.touches?e.touches[0].clientY:e.clientY)-r.top-r.height/2;
+    let deg = Math.atan2(x,-y)*180/Math.PI; deg = Math.max(-135, Math.min(135, deg));
+    setKnob(Math.round((deg+135)/270*6)); };
+  k.addEventListener('pointerdown', e=>{ on=true; k.setPointerCapture(e.pointerId); from(e); });
+  k.addEventListener('pointermove', e=>{ if(on) from(e); });
+  k.addEventListener('pointerup', ()=> on=false);
+  k.addEventListener('keydown', e=>{
+    if(e.key==='ArrowRight'||e.key==='ArrowUp'){ setKnob(kv+1); e.preventDefault(); }
+    if(e.key==='ArrowLeft'||e.key==='ArrowDown'){ setKnob(kv-1); e.preventDefault(); }
+  });
+})();
+
+/* ---- section 6: a real Nairobi kitchen, built in layers ---- */
+$('#s6scene').innerHTML = `
+  <div style="position:absolute;inset:0;background:linear-gradient(0deg,rgba(28,18,10,.5),transparent 42%);pointer-events:none"></div>
+  <div style="position:absolute;left:18px;bottom:14px;font-size:9px;letter-spacing:.2em;color:rgba(255,246,232,.8)">KILIMANI, NAIROBI &mdash; 16:52</div>
+  <div style="position:absolute;right:18px;top:16px;font-size:9px;letter-spacing:.2em;color:rgba(255,246,232,.75)">13 KG CYLINDER &middot; MAINS OPTIONAL</div>`;
+
+/* ---- section 4 bed: warm frames behind the type ---- */
+$('#s4bed').innerHTML = `<div style="position:absolute;inset:0;display:grid;grid-template-columns:repeat(3,1fr)">
+  <div style="position:relative;overflow:hidden">${SCENES.table()}</div>
+  <div style="position:relative;overflow:hidden">${SCENES.serve()}</div>
+  <div style="position:relative;overflow:hidden">${SCENES.hands()}</div>
+</div><div style="position:absolute;inset:0;background:linear-gradient(90deg,#0C0A08 0%,rgba(12,10,8,.35) 30%,rgba(12,10,8,.35) 70%,#0C0A08 100%)"></div>`;
+
+/* ---- ticker: where the cookers actually go ---- */
+const COUNTIES = ['Nairobi','Kiambu','Nakuru','Mombasa','Kisumu','Uasin Gishu','Machakos','Meru','Nyeri','Kakamega','Kilifi','Kajiado','Bungoma','Kericho','Embu','Garissa','Trans Nzoia','Laikipia'];
+$('#ticker').innerHTML = (`<span>${COUNTIES.join('</span><span>')}</span>`).repeat(2);
+
+/* ---- reveals, parallax, spine, nav ---- */
+const io = new IntersectionObserver(es=>{
+  es.forEach(e=>{ if(e.isIntersecting){ e.target.classList.add('in');
+    if(e.target.dataset.count!==undefined) countUp(e.target);
+    io.unobserve(e.target); } });
+},{threshold:.14, rootMargin:'0px 0px -8% 0px'});
+$$('.rv,.lines,.s5__main,[data-count]').forEach(el=>io.observe(el));
+
+function countUp(el){
+  const to = +el.dataset.count; if(RM){ el.textContent = to.toLocaleString('en-KE'); return; }
+  const t0 = performance.now(), dur = 1500;
+  (function step(t){ const k = Math.min(1,(t-t0)/dur), e = 1-Math.pow(1-k,3);
+    el.textContent = Math.round(to*e).toLocaleString('en-KE');
+    if(k<1) requestAnimationFrame(step); })(t0);
+}
+
+const SECTIONS = [['.hero','THE ROOM'],['#cook','GOOD FOOD'],['#appliances','THE EDIT'],['#story','THE TABLE'],['#discover','HOW IT WORKS'],['.s6','KENYA']];
+const pars = $$('[data-par]');
+let lastY = 0, ticking = false;
+function frame(){
+  ticking = false;
+  const y = window.scrollY, h = document.documentElement.scrollHeight - innerHeight;
+  const pct = Math.max(0, Math.min(1, y/h));
+  $('#spineFill').style.height = (pct*100).toFixed(2)+'%';
+  $('#spinePct').textContent = String(Math.round(pct*100)).padStart(2,'0');
+  $('#nav').classList.toggle('tuck', y > lastY && y > 420);
+  lastY = y;
+  if(!RM) pars.forEach(el=>{
+    const r = el.getBoundingClientRect(); if(r.bottom<-200||r.top>innerHeight+200) return;
+    const off = (r.top + r.height/2 - innerHeight/2) * -(+el.dataset.par);
+    el.style.transform = `translate3d(0,${off.toFixed(1)}px,0)`;
+  });
+  let now = 'THE ROOM';
+  SECTIONS.forEach(([sel,label])=>{ const el = $(sel); if(el && el.getBoundingClientRect().top <= innerHeight*0.42) now = label; });
+  if($('#spineNow').textContent !== now) $('#spineNow').textContent = now;
+  const navMap = {'#cook':'cook','#appliances':'appliances','#story':'story','#discover':'discover'};
+  $$('.nav a').forEach(a=>{
+    const t = $(a.getAttribute('href')); if(!t) return;
+    const r = t.getBoundingClientRect();
+    a.classList.toggle('on', r.top <= innerHeight*.5 && r.bottom >= innerHeight*.4);
+  });
+}
+addEventListener('scroll', ()=>{ if(!ticking){ ticking = true; requestAnimationFrame(frame); } }, {passive:true});
+frame();
+
+/* ---- cursor ---- */
+if(matchMedia('(hover:hover)').matches && !RM){
+  const cur = $('#cur'), dot = $('#curdot');
+  let tx=innerWidth/2, ty=innerHeight/2, cx=tx, cy=ty;
+  addEventListener('pointermove', e=>{ tx=e.clientX; ty=e.clientY;
+    dot.style.transform = `translate3d(${tx}px,${ty}px,0)`; }, {passive:true});
+  (function loop(){ cx += (tx-cx)*.17; cy += (ty-cy)*.17;
+    cur.style.transform = `translate3d(${cx}px,${cy}px,0)`; requestAnimationFrame(loop); })();
+  document.addEventListener('pointerover', e=>{
+    const t = e.target.closest('a,button,[data-cur],.plate,.knob');
+    if(t){ cur.classList.add('hot'); cur.dataset.l = t.dataset.cur || (t.classList.contains('knob')?'TURN':(t.classList.contains('plate')?'LOOK':'')); }
+    else cur.classList.remove('hot');
+  });
+}
+
+/* ---- intro ---- */
+(function intro(){
+  const w = $('#introW'); const host = $('#intro');
+  'HEARTH'.split('').forEach((c,i)=> w.insertAdjacentHTML('beforeend', `<i style="animation-delay:${.06*i+.1}s">${c}</i>`));
+  if(RM || store.ses('hearth.seen')){ host.style.transition='none'; host.classList.add('gone'); return; }
+  document.body.classList.add('locked');
+  setTimeout(()=>{ host.classList.add('gone'); document.body.classList.remove('locked');
+    store.sesSet('hearth.seen','1'); setTimeout(()=>host.remove(), 1200); }, 1750);
+})();
+/* ===============================================================
+   THE CAMERA
+   A flat picture is a picture with no depth cues. This renders the
+   kitchen the way a lens sees it: layers separated by focus, one
+   blown highlight, specular on every hard surface, bounce off the
+   floor, then a film pipeline over the whole frame —
+   bloom, S-curve, split-tone, chromatic aberration, vignette, grain.
+   =============================================================== */
+function rng(seed){ return function(){ seed|=0; seed=seed+0x6D2B79F5|0;
+  let t=Math.imul(seed^seed>>>15,1|seed); t=t+Math.imul(t^t>>>7,61|t)^t;
+  return ((t^t>>>14)>>>0)/4294967296; }; }
+const NOISE = (()=>{ const r=rng(9731), a=new Float32Array(8192);
+  for(let i=0;i<8192;i++) a[i]=r(); return a; })();
+
+function grad(c,x0,y0,x1,y1,stops){ const g=c.createLinearGradient(x0,y0,x1,y1);
+  stops.forEach(s=>g.addColorStop(s[0],s[1])); return g; }
+function rad(c,x,y,r0,r1,stops){ const g=c.createRadialGradient(x,y,r0,x,y,r1);
+  stops.forEach(s=>g.addColorStop(s[0],s[1])); return g; }
+function ell(c,x,y,rx,ry,fill){ c.beginPath(); c.ellipse(x,y,rx,ry,0,0,7); c.fillStyle=fill; c.fill(); }
+function box(c,x,y,w,h,fill){ c.fillStyle=fill; c.fillRect(x,y,w,h); }
+/* anisotropic brushed metal — the thing that makes steel read as steel */
+function brushed(c,x,y,w,h,seed,amt){
+  const r=rng(seed); c.save(); c.beginPath(); c.rect(x,y,w,h); c.clip();
+  for(let i=0;i<w*1.6;i++){ const lx=x+r()*w, a=r()*amt;
+    c.fillStyle= r()>.5 ? 'rgba(255,255,255,'+a+')' : 'rgba(0,0,0,'+a+')';
+    c.fillRect(lx, y+r()*h*.2, 1, h*(0.5+r()*0.6)); }
+  c.restore();
+}
+/* soft contact shadow / ambient occlusion */
+function ao(c,x,y,rx,ry,strength){
+  ell(c,x,y,rx,ry, rad(c,x,y,0,Math.max(rx,ry),[[0,'rgba(6,4,2,'+strength+')'],[.55,'rgba(6,4,2,'+strength*.5+')'],[1,'rgba(6,4,2,0)']]));
+}
+
+const Photo = {
+  shoot(host, draw, o){
+    o = Object.assign({bloom:.2, lift:.04, gamma:.94, ca:.7, vig:.58, grain:13, warm:1}, o||{});
+    const cvs = document.createElement('canvas');
+    cvs.className = 'shot'; cvs.setAttribute('role','img');
+    cvs.setAttribute('aria-label', o.alt || 'Kitchen photograph');
+    host.insertBefore(cvs, host.firstChild);
+    let lastW = 0;
+    function render(){
+      const r = host.getBoundingClientRect();
+      if(!r.width || !r.height) return;
+      const dpr = Math.min(1.5, window.devicePixelRatio || 1);
+      const W = Math.min(1700, Math.round(r.width*dpr));
+      const H = Math.round(W * (r.height/r.width));
+      if(!W || !H) return;
+      cvs.width = W; cvs.height = H;
+      const ctx = cvs.getContext('2d', {alpha:false});
+      const s = Math.max(W/1600, H/900), ox = (W-1600*s)/2, oy = (H-900*s)/2;
+      const scratch = document.createElement('canvas'); scratch.width=W; scratch.height=H;
+      const sx = scratch.getContext('2d');
+      ctx.fillStyle = '#100c09'; ctx.fillRect(0,0,W,H);
+      const layer = (blur, fn, op)=>{
+        sx.setTransform(1,0,0,1,0,0); sx.clearRect(0,0,W,H);
+        sx.save(); sx.translate(ox,oy); sx.scale(s,s); fn(sx); sx.restore();
+        ctx.save();
+        if(blur>0) ctx.filter = 'blur(' + (blur*s).toFixed(2) + 'px)';
+        if(op) ctx.globalCompositeOperation = op;
+        ctx.drawImage(scratch,0,0); ctx.restore();
+      };
+      draw({layer, W, H, s});
+      Photo.develop(cvs, ctx, W, H, o);
+      lastW = Math.round(r.width);
+    }
+    render();
+    let t; addEventListener('resize', ()=>{ clearTimeout(t); t = setTimeout(()=>{
+      const w = Math.round(host.getBoundingClientRect().width);
+      if(Math.abs(w-lastW) > 40) render();
+    }, 260); }, {passive:true});
+    return cvs;
+  },
+
+  /* the darkroom pass */
+  develop(cvs, ctx, W, H, o){
+    /* 1. bloom — bright areas bleed, the way light does through glass */
+    const bl = document.createElement('canvas'); bl.width=W; bl.height=H;
+    const bx = bl.getContext('2d');
+    bx.drawImage(cvs,0,0);
+    bx.globalCompositeOperation = 'multiply';
+    bx.drawImage(cvs,0,0); bx.drawImage(cvs,0,0);
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    ctx.globalAlpha = o.bloom;
+    ctx.filter = 'blur(' + Math.max(8, Math.round(W/34)) + 'px)';
+    ctx.drawImage(bl,0,0);
+    ctx.restore();
+
+    /* 2. tone curve LUT: lifted blacks, rolled highlights */
+    const lut = new Uint8ClampedArray(256);
+    for(let i=0;i<256;i++){
+      let v = Math.pow(i/255, o.gamma);
+      v = v*v*(3-2*v)*0.5 + v*0.5;          // gentle S
+      v = o.lift + v*(1-o.lift);            // film never reaches true black
+      lut[i] = v*255;
+    }
+    /* 3. one pixel pass: CA + grade + split-tone + vignette + grain */
+    let img; try{ img = ctx.getImageData(0,0,W,H); }catch(e){ return; }
+    const d = img.data, src = new Uint8ClampedArray(d);
+    const cx = W/2, cy = H/2, maxd = Math.hypot(cx,cy);
+    const kr = 1 + o.ca/1400, kb = 1 - o.ca/1400;
+    const warm = o.warm;
+    for(let y=0; y<H; y++){
+      const fy = y-cy;
+      for(let x=0; x<W; x++){
+        const i = (y*W+x)*4, fx = x-cx;
+        let ri = i, bi = i;
+        if(o.ca){
+          const rx = (cx+fx*kr)|0, ry = (cy+fy*kr)|0, bx2 = (cx+fx*kb)|0, by2 = (cy+fy*kb)|0;
+          if(rx>=0&&rx<W&&ry>=0&&ry<H) ri = (ry*W+rx)*4;
+          if(bx2>=0&&bx2<W&&by2>=0&&by2<H) bi = (by2*W+bx2)*4;
+        }
+        let r = lut[src[ri]], g = lut[src[i+1]], b = lut[src[bi+2]];
+        const lum = (r*0.2126 + g*0.7152 + b*0.0722)/255;
+        /* split tone: sun in the highlights, shade goes cool — the blue is the brand */
+        const hi = lum*lum, sh = (1-lum)*(1-lum);
+        r += hi*10*warm - sh*7;
+        g += hi*3*warm  - sh*1;
+        b += -hi*9*warm + sh*13;
+        /* vignette */
+        const vg = 1 - o.vig*0.55*Math.pow(Math.hypot(fx,fy)/maxd, 2.3);
+        r*=vg; g*=vg; b*=vg;
+        /* grain, strongest in the midtones like real emulsion */
+        const n = (NOISE[(x*7 + y*131) & 8191]-0.5) * o.grain * (lum*(1-lum)*4);
+        d[i] = r+n; d[i+1] = g+n; d[i+2] = b+n; d[i+3] = 255;
+      }
+    }
+    ctx.putImageData(img,0,0);
+  }
+};
+
+/* ---------------------------------------------------------------
+   THE COOKER — drawn as a lit object, not a diagram.
+   --------------------------------------------------------------- */
+function drawCooker(c, steel){
+  const body = steel ? ['#d3cdc4','#a29c93','#6f6a63'] : ['#2b2622','#1a1613','#0d0b09'];
+  const edge = steel ? '#f4efe6' : '#6b6159';
+  const knobHi = steel ? '#6d655c' : '#4a443d';
+  const knobLo = steel ? '#2a2621' : '#1c1916';
+
+  box(c,262,282,378,56, grad(c,262,282,262,338,[[0,body[1]],[1,body[2]]]));
+  box(c,262,282,378,3, edge);
+  if(steel) brushed(c,262,282,378,56,11,.05);
+  c.save(); c.globalAlpha=.5; c.fillStyle = steel ? '#3a352f' : '#efe7da';
+  c.font='700 14px Archivo, Arial, sans-serif'; c.textAlign='center';
+  try{ c.letterSpacing='8px'; }catch(e){}
+  c.fillText('HEARTH', 455, 318); c.restore();
+
+  /* hob plane in perspective */
+  c.beginPath(); c.moveTo(272,342); c.lineTo(630,342); c.lineTo(662,438); c.lineTo(240,438); c.closePath();
+  c.fillStyle = grad(c,451,342,451,438,[[0,steel?'#c6c0b7':'#221e1a'],[.5,steel?'#b2aca3':'#191512'],[1,steel?'#9a948c':'#100e0c']]);
+  c.fill();
+  c.save(); c.clip();
+  if(steel) brushed(c,240,342,422,96,23,.05);
+  /* sun raking across the hob — most of the realism lives in this one highlight */
+  c.fillStyle = grad(c,662,342,300,438,[[0,'rgba(255,216,152,.40)'],[.45,'rgba(255,198,132,.10)'],[1,'rgba(255,190,120,0)']]);
+  c.fillRect(240,342,422,96);
+  c.restore();
+  box(c,272,342,358,3,'rgba(255,255,255,.28)');
+  /* the hob's front edge catches the window — reads as a machined lip */
+  c.fillStyle = grad(c,240,432,240,440,[[0,'rgba(255,232,190,.55)'],[1,'rgba(255,214,160,0)']]);
+  c.fillRect(240,430,422,9);
+
+  function burner(x,y,rx,ry,lit){
+    ao(c,x,y+5,rx*1.3,ry*1.3,.55);
+    ell(c,x,y,rx,ry, rad(c,x-rx*.3,y-ry*.5,1,rx,[[0,'#8f6d3d'],[.6,'#6a4f29'],[1,'#3b2b16']]));
+    ell(c,x,y,rx*.72,ry*.72,'#17130f');
+    ell(c,x,y,rx*.30,ry*.30,'#0a0806');
+    c.save(); c.lineCap='round';
+    for(let k=0;k<4;k++){ const a=k*Math.PI/4, dx=Math.cos(a)*rx*1.3, dy=Math.sin(a)*ry*1.3;
+      c.strokeStyle='#100d0a'; c.lineWidth=5.5;
+      c.beginPath(); c.moveTo(x-dx,y-dy); c.lineTo(x+dx,y+dy); c.stroke();
+      c.strokeStyle='rgba(255,220,170,.28)'; c.lineWidth=1.5;
+      c.beginPath(); c.moveTo(x-dx,y-dy-2.2); c.lineTo(x+dx,y+dy-2.2); c.stroke(); }
+    c.restore();
+    if(lit){ c.save(); c.globalCompositeOperation='lighter';
+      ell(c,x,y,rx*1.6,ry*2.4, rad(c,x,y,1,rx*1.7,
+        [[0,'rgba(96,152,255,.55)'],[.45,'rgba(43,92,230,.20)'],[1,'rgba(43,92,230,0)']]));
+      c.restore(); }
+  }
+  burner(348,372,40,15,false);
+  (function(x,y,rx,ry){            /* the E in 3G+1E */
+    ao(c,x,y+5,rx*1.25,ry*1.25,.5);
+    ell(c,x,y,rx,ry,'#2b2621');
+    ell(c,x,y-1,rx*.93,ry*.93, rad(c,x-rx*.3,y-ry*.6,1,rx,[[0,'#5a5147'],[1,'#312b25']]));
+    c.strokeStyle='#191513'; c.lineWidth=2.6;
+    [.72,.5,.28].forEach(f=>{ c.beginPath(); c.ellipse(x,y-1,rx*f,ry*f,0,0,7); c.stroke(); });
+  })(556,372,40,15);
+  burner(330,415,48,19,true);
+  burner(574,415,48,19,false);
+
+  /* body */
+  box(c,240,438,422,352, grad(c,240,438,662,438,
+    [[0,body[2]],[.16,body[1]],[.44,body[0]],[.74,body[1]],[1,body[2]]]));
+  if(steel) brushed(c,240,438,422,352,37,.055);
+  box(c,240,438,422,3,edge);
+  /* RIM LIGHT — the window wrapping the right edge. without this a black
+     cooker in a dark corner is just a hole in the picture. */
+  c.fillStyle = grad(c,662,438,626,438,[[0,'rgba(255,226,180,.72)'],[.4,'rgba(255,206,150,.20)'],[1,'rgba(255,200,140,0)']]);
+  c.fillRect(620,438,42,352);
+  c.fillStyle = grad(c,240,438,268,438,[[0,'rgba(120,150,210,.16)'],[1,'rgba(120,150,210,0)']]);
+  c.fillRect(240,438,30,352);
+  box(c,240,438,422,60,'rgba(0,0,0,.26)');
+  box(c,240,438,422,2,'rgba(0,0,0,.5)');
+
+  [282,340,398,512,570].forEach(function(x){
+    ao(c,x,474,18,16,.5);
+    /* chrome collar */
+    ell(c,x,469,15,15, grad(c,x-15,454,x+15,484,[[0,'#8b837a'],[.35,'#efe9df'],[.7,'#7e766e'],[1,'#403a34']]));
+    /* dark cap */
+    ell(c,x,469,11.5,11.5, rad(c,x-4,464,1,16,[[0,knobHi],[.7,knobLo],[1,'#0f0d0b']]));
+    c.save(); c.strokeStyle='rgba(255,255,255,.42)'; c.lineWidth=1.2;
+    c.beginPath(); c.arc(x,469,11.5,Math.PI*1.06,Math.PI*1.58); c.stroke();
+    c.strokeStyle='rgba(245,240,230,.92)'; c.lineWidth=2.2; c.lineCap='round';
+    c.beginPath(); c.moveTo(x,466); c.lineTo(x,460); c.stroke(); c.restore();
+  });
+  c.save(); c.globalCompositeOperation='lighter';
+  ell(c,632,470,10,10, rad(c,632,470,0,13,[[0,'rgba(255,124,52,.95)'],[1,'rgba(255,124,52,0)']]));
+  c.restore();
+
+  /* oven door */
+  box(c,252,520,398,236,'rgba(0,0,0,.28)');
+  box(c,256,524,390,228, grad(c,256,524,646,752,[[0,body[0]],[.5,body[1]],[1,body[2]]]));
+  box(c,256,524,390,2,'rgba(255,226,182,.34)');
+  box(c,262,528,378,220, grad(c,262,528,262,748,[[0,body[1]],[1,body[2]]]));
+  box(c,278,546,346,184, grad(c,278,546,624,730,[[0,'#2c2824'],[.35,'#100e0c'],[.75,'#070605'],[1,'#0e0c0a']]));
+  c.save(); c.beginPath(); c.rect(278,546,346,184); c.clip();
+  c.globalCompositeOperation='lighter';
+  /* the window, smeared across the oven glass */
+  c.fillStyle = grad(c,430,546,640,730,[[0,'rgba(255,228,184,.17)'],[.5,'rgba(255,214,160,.07)'],[1,'rgba(255,200,140,0)']]);
+  c.beginPath(); c.moveTo(428,546); c.lineTo(556,546); c.lineTo(638,730); c.lineTo(508,730); c.closePath(); c.fill();
+  /* rack, just visible through the glass */
+  c.globalCompositeOperation='source-over'; c.strokeStyle='rgba(180,150,110,.13)'; c.lineWidth=2.5;
+  [600,660].forEach(function(y){ c.beginPath(); c.moveTo(296,y); c.lineTo(606,y); c.stroke(); });
+  c.restore();
+  c.strokeStyle='rgba(255,255,255,.10)'; c.lineWidth=1.4; c.strokeRect(278,546,346,184);
+
+  /* handle — one hard specular line is what makes chrome read as chrome */
+  ao(c,451,524,212,11,.5);
+  box(c,248,502,406,13, grad(c,248,502,248,515,
+    [[0,'#5b544c'],[.26,'#e8e1d6'],[.4,'#a7a098'],[.72,'#6d665f'],[1,'#3b352f']]));
+  box(c,248,503,406,1.6,'rgba(255,252,246,.85)');
+  box(c,262,517,14,12,body[2]); box(c,626,517,14,12,body[2]);
+
+  box(c,240,756,422,34,'rgba(0,0,0,.44)');
+  box(c,252,790,22,16,'#0b0907'); box(c,628,790,22,16,'#0b0907');
+}
+
+/* ---------------------------------------------------------------
+   THE SUFURIA — aluminium, scratched, lid ajar, something in it.
+   --------------------------------------------------------------- */
+function drawPot(c){
+  ao(c,330,420,84,24,.6);
+  /* body: tapers in toward the base, as they do */
+  c.beginPath(); c.moveTo(244,318); c.lineTo(416,318); c.lineTo(398,408);
+  c.bezierCurveTo(398,424,262,424,262,408); c.closePath();
+  c.fillStyle = grad(c,244,318,416,318,
+    [[0,'#37342f'],[.12,'#6b665f'],[.34,'#928c84'],[.56,'#7b756d'],[.8,'#57524c'],[1,'#332f2b']]);
+  c.fill();
+  c.save(); c.clip(); brushed(c,244,306,172,130,71,.13);
+  /* sun on the right shoulder only — aluminium, not porcelain */
+  c.fillStyle = grad(c,416,318,330,418,[[0,'rgba(255,224,176,.30)'],[.5,'rgba(255,214,160,.05)'],[1,'rgba(255,214,160,0)']]);
+  c.fillRect(244,306,172,130); c.restore();
+  /* rim */
+  ell(c,330,318,86,17,'#8d877f');
+  ell(c,330,318,76,13,'#1b1815');
+  c.save(); c.globalCompositeOperation='lighter';
+  ell(c,330,317,76,13, rad(c,330,317,1,76,[[0,'rgba(214,126,48,.5)'],[1,'rgba(214,126,48,0)']]));
+  c.restore();
+  c.save(); c.strokeStyle='rgba(248,242,230,.7)'; c.lineWidth=2.2;
+  c.beginPath(); c.ellipse(330,318,86,17,0,Math.PI*1.1,Math.PI*1.88); c.stroke(); c.restore();
+  /* handles */
+  c.save(); c.strokeStyle='#7e786f'; c.lineWidth=7; c.lineCap='round';
+  c.beginPath(); c.arc(244,344,17,Math.PI*.55,Math.PI*1.45); c.stroke();
+  c.beginPath(); c.arc(416,344,17,Math.PI*1.55,Math.PI*.45); c.stroke(); c.restore();
+  /* lid, leaning */
+  c.save(); c.translate(452,356); c.rotate(-0.34);
+  ell(c,0,0,58,13, grad(c,-58,-13,58,13,[[0,'#6e6960'],[.4,'#cfc9be'],[1,'#7d776e']]));
+  ell(c,0,-3,58,13, grad(c,-58,-13,58,13,[[0,'#7b756c'],[.4,'#ded8cd'],[1,'#8a847b']]));
+  ell(c,0,-13,11,5,'#3f3a34'); c.restore();
+  /* wooden spoon */
+  c.save(); c.strokeStyle='#8a6234'; c.lineWidth=9; c.lineCap='round';
+  c.beginPath(); c.moveTo(356,306); c.lineTo(448,212); c.stroke();
+  c.strokeStyle='#6d4c26'; c.lineWidth=13;
+  c.beginPath(); c.moveTo(446,214); c.lineTo(456,204); c.stroke(); c.restore();
+}
+
+/* ---------------------------------------------------------------
+   THE ROOM
+   --------------------------------------------------------------- */
+function drawKitchen(env, steel, v){
+  const L = env.layer;
+  /* the subject sits beside the window, where the light is; the counter
+     runs off to the left so the headline lands on quiet floor, not on the cooker */
+  const NB = v === 'nairobi', DX = 470;
+
+  /* --- far: plaster wall + a window that is genuinely blown out --- */
+  L(8, function(c){
+    c.fillStyle = grad(c,0,0,0,900,[[0,'#7d5636'],[.45,'#563926'],[1,'#2e1f15']]);
+    c.fillRect(0,0,1600,900);
+    c.fillStyle = rad(c,1300,170,40,980,[[0,'rgba(255,206,148,.62)'],[.5,'rgba(255,186,120,.18)'],[1,'rgba(255,180,110,0)']]);
+    c.fillRect(0,0,1600,900);
+    const r = rng(4242);                       /* plaster mottling */
+    for(let i=0;i<320;i++){
+      const x=r()*1600, y=r()*820, rr=18+r()*90;
+      c.fillStyle = rad(c,x,y,0,rr,[[0,'rgba('+(r()>.5?'255,226,180':'40,24,12')+','+(0.018+r()*0.03)+')'],[1,'rgba(0,0,0,0)']]);
+      c.fillRect(x-rr,y-rr,rr*2,rr*2);
+    }
+    /* window: clipped white. real cameras clip; flat renders never do */
+    box(c,1092,-40,470,472,'#fffdf4');
+    c.fillStyle = grad(c,1092,-40,1400,432,[[0,'#ffffff'],[.6,'#fff3d8'],[1,'#f5cb8a']]);
+    c.fillRect(1092,-40,470,472);
+    if(NB){                       /* burglar bars — every Nairobi window has them */
+      c.strokeStyle='rgba(58,42,28,.92)'; c.lineWidth=9;
+      for(let k=0;k<7;k++){ c.beginPath(); c.moveTo(1114+k*62,-40); c.lineTo(1114+k*62,432); c.stroke(); }
+      c.lineWidth=11;
+      for(let k=0;k<4;k++){ c.beginPath(); c.moveTo(1092,-16+k*124); c.lineTo(1562,-16+k*124); c.stroke(); }
+    } else {                      /* louvre slats */
+      for(let k=0;k<11;k++){
+        c.fillStyle='rgba(72,44,22,'+(0.30+0.05*(k%3))+')';
+        c.fillRect(1092,-40+k*44,470,13);
+      }
+    }
+    c.strokeStyle='#33241a'; c.lineWidth=14; c.strokeRect(1092,-40,470,472);
+    c.fillStyle='rgba(51,36,26,.9)'; c.fillRect(1320,-40,13,472);
+    /* halation — light eating into the wall around the frame */
+    c.save(); c.globalCompositeOperation='lighter';
+    c.fillStyle = rad(c,1327,196,60,560,[[0,'rgba(255,240,208,.85)'],[.35,'rgba(255,222,170,.30)'],[1,'rgba(255,210,150,0)']]);
+    c.fillRect(760,-380,1200,1150); c.restore();
+    box(c,0,0,54,900,'rgba(18,11,6,.72)');       /* doorway jamb, far left */
+  });
+
+  /* --- mid: splashback, counter, floor, clutter --- */
+  L(2.6, function(c){
+    /* splashback, behind the cooker */
+    c.save(); c.translate(582,0);
+    const r = rng(8123);
+    for(let ty=0; ty<7; ty++) for(let tx=0; tx<11; tx++){
+      const x=118+tx*64, y=296+ty*60, n=r();
+      c.fillStyle='rgb('+(150+n*26|0)+','+(126+n*24|0)+','+(98+n*22|0)+')';
+      c.fillRect(x,y,62,58);
+      c.fillStyle='rgba(255,236,200,'+(0.05+n*0.09)+')'; c.fillRect(x,y,62,7);
+    }
+    c.save(); c.globalCompositeOperation='lighter';
+    c.fillStyle = grad(c,822,296,200,700,[[0,'rgba(255,214,156,.34)'],[1,'rgba(255,200,140,0)']]);
+    c.fillRect(118,296,704,420); c.restore();
+    box(c,118,296,704,420,'rgba(40,24,14,.16)');
+    c.restore();
+
+    /* floor: wall junction at 700, sun pool from the window */
+    c.fillStyle = grad(c,0,700,0,900,[[0,'#2b1d13'],[.35,'#3e2a1b'],[1,'#150e08']]);
+    c.fillRect(0,700,1600,200);
+    c.save(); c.globalCompositeOperation='lighter';
+    c.fillStyle = rad(c,1120,790,20,560,[[0,'rgba(255,198,132,.55)'],[.5,'rgba(255,180,110,.14)'],[1,'rgba(255,170,100,0)']]);
+    c.fillRect(300,690,1300,230); c.restore();
+    c.strokeStyle='rgba(12,8,4,.22)'; c.lineWidth=1.4;   /* floor tiles, converging */
+    for(let k=-7;k<16;k++){ c.beginPath(); c.moveTo(760+k*70,700); c.lineTo(760+k*250,900); c.stroke(); }
+    [714,742,782,840].forEach(function(y){ c.beginPath(); c.moveTo(0,y); c.lineTo(1600,y); c.stroke(); });
+
+    /* counter run, now off to the left */
+    c.save(); c.translate(-828,0);
+    box(c,828,556,772,28, grad(c,828,556,828,584,[[0,'#a89275'],[.35,'#8d7a60'],[1,'#5f513f']]));
+    box(c,828,556,772,4,'rgba(255,236,198,.55)');
+    box(c,828,584,772,160, grad(c,828,584,828,744,[[0,'#4a3826'],[1,'#2a1e14']]));
+    c.strokeStyle='rgba(14,9,5,.7)'; c.lineWidth=3;
+    [1010,1214,1420].forEach(function(x){ c.beginPath(); c.moveTo(x,584); c.lineTo(x,744); c.stroke(); });
+    c.save(); c.globalCompositeOperation='lighter';
+    c.fillStyle = grad(c,1600,556,900,700,[[0,'rgba(255,214,158,.34)'],[1,'rgba(255,200,140,0)']]);
+    c.fillRect(828,556,772,190); c.restore();
+
+    /* shelf + jars */
+    box(c,860,392,420,12,'#5b452e'); box(c,860,392,420,3,'rgba(255,228,180,.5)');
+    [[900,'#7a5c33',34,54],[966,'#3f3128',28,44],[1022,'#8a6a3a',24,38],[1180,'#5d4a36',30,48]]
+      .forEach(function(j){ box(c,j[0],392-j[3],j[2],j[3], grad(c,j[0],0,j[0]+j[2],0,
+        [[0,'rgba(0,0,0,.4)'],[.4,j[1]],[1,'rgba(0,0,0,.35)']])); });
+
+    /* chopping board, tomatoes, onion */
+    box(c,884,528,212,30, grad(c,884,528,884,558,[[0,'#c9955c'],[1,'#8a6234']]));
+    box(c,884,528,212,5,'rgba(255,238,200,.6)');
+    ao(c,990,560,116,10,.5);
+    ell(c,930,524,23,17,'#a8321f'); ell(c,922,516,8,5,'rgba(255,170,140,.55)');
+    ell(c,972,526,19,14,'#8c2a18');
+    ell(c,1032,524,24,18,'#e3d6b4'); ell(c,1032,524,13,9,'rgba(160,140,100,.4)');
+    /* jar of utensils */
+    box(c,1150,452,64,106, grad(c,1150,0,1214,0,[[0,'rgba(255,255,255,.22)'],[.45,'rgba(60,48,36,.85)'],[1,'rgba(255,255,255,.12)']]));
+    c.save(); c.strokeStyle='#8a6234'; c.lineWidth=8; c.lineCap='round';
+    [[1166,452,1156,408],[1182,452,1184,398],[1198,452,1212,404]].forEach(function(p){
+      c.beginPath(); c.moveTo(p[0],p[1]); c.lineTo(p[2],p[3]); c.stroke(); });
+    c.restore();
+    /* dish rack + cloth */
+    c.save(); c.strokeStyle='#7d766d'; c.lineWidth=4;
+    for(let k=0;k<7;k++){ c.beginPath(); c.moveTo(1330+k*26,498); c.lineTo(1330+k*26,556); c.stroke(); }
+    c.restore(); box(c,1318,552,196,7,'#6b645c');
+    c.beginPath(); c.moveTo(1236,556); c.lineTo(1310,556); c.lineTo(1296,640); c.lineTo(1248,632); c.closePath();
+    c.fillStyle = grad(c,1236,556,1300,640,[[0,'#cfc2a6'],[1,'#8d8169']]); c.fill();
+    /* socket, and the cylinder pipe disappearing behind the cooker */
+    box(c,706,470,44,58,'#d8cdb8'); box(c,714,486,10,14,'#2a2420'); box(c,732,486,10,14,'#2a2420');
+    c.restore();
+    if(NB){                       /* the 13kg cylinder, where it actually lives */
+      c.translate(452,0);
+      ao(c,182,822,86,18,.75);
+      box(c,126,664,112,158, grad(c,126,0,238,0,
+        [[0,'#5e1c14'],[.3,'#9c3527'],[.55,'#b84232'],[.8,'#7d2a1e'],[1,'#4a1710']]));
+      box(c,126,664,112,16,'#c04a36');
+      box(c,126,742,112,9,'rgba(64,18,12,.8)');
+      box(c,156,632,52,34, grad(c,156,0,208,0,[[0,'#3a352f'],[.4,'#6b645b'],[1,'#2e2a25']]));
+      c.strokeStyle='#4a443c'; c.lineWidth=7; c.lineCap='round';
+      c.beginPath(); c.moveTo(208,650); c.lineTo(268,656); c.lineTo(286,700); c.stroke();
+    }
+  });
+
+  /* --- focal plane: the cooker. nothing else is this sharp. --- */
+  L(0, function(c){
+    c.save(); c.translate(DX,0);
+    /* long shadow thrown away from the window, across the floor */
+    c.save();
+    c.beginPath(); c.moveTo(238,788); c.lineTo(664,788); c.lineTo(286,900); c.lineTo(-360,900); c.closePath();
+    c.fillStyle = grad(c,560,800,-200,900,[[0,'rgba(9,6,3,.66)'],[.45,'rgba(9,6,3,.32)'],[1,'rgba(9,6,3,0)']]);
+    c.fill(); c.restore();
+    ao(c,451,800,268,40,.85);                       /* contact shadow */
+    c.fillStyle = grad(c,240,760,240,900,[[0,'rgba(8,5,3,.7)'],[1,'rgba(8,5,3,0)']]);
+    c.fillRect(150,780,600,120);
+    drawCooker(c, steel);
+    if(!NB){                    /* the 13kg cylinder, silhouetted against the window */
+      ao(c,748,806,58,14,.7);
+      box(c,700,646,96,158, grad(c,700,0,796,0,
+        [[0,'#3d120c'],[.28,'#7d2a1e'],[.55,'#9c3527'],[.82,'#5e1c14'],[1,'#2e0d08']]));
+      box(c,700,646,96,14,'#a8402e');
+      box(c,700,714,96,8,'rgba(50,14,10,.8)');
+      box(c,726,616,44,30, grad(c,726,0,770,0,[[0,'#2e2a25'],[.45,'#6b645b'],[1,'#26231f']]));
+    }
+    /* a cloth over the handle — nothing says "in use" faster */
+    c.save();
+    c.beginPath(); c.moveTo(266,502); c.lineTo(384,502); c.lineTo(392,548);
+    c.bezierCurveTo(372,576,352,582,330,570);
+    c.bezierCurveTo(308,560,288,566,268,552); c.closePath();
+    c.fillStyle = grad(c,266,502,392,574,[[0,'#8d7f63'],[.4,'#b3a486'],[.75,'#7a6e56'],[1,'#4e4536']]);
+    c.fill();
+    c.strokeStyle='rgba(48,38,26,.3)'; c.lineWidth=1.8;
+    [296,324,352].forEach(function(x){ c.beginPath(); c.moveTo(x,508); c.lineTo(x-3,562); c.stroke(); });
+    c.restore();
+    drawPot(c);
+    /* bounce: warm light thrown back up off the floor */
+    c.save(); c.globalCompositeOperation='lighter';
+    c.fillStyle = grad(c,451,790,451,600,[[0,'rgba(232,148,72,.20)'],[1,'rgba(232,148,72,0)']]);
+    c.fillRect(240,600,422,190);
+    /* flame spilling out from under the sufuria */
+    c.fillStyle = rad(c,330,418,4,120,[[0,'rgba(120,176,255,.60)'],[.4,'rgba(43,92,230,.20)'],[1,'rgba(43,92,230,0)']]);
+    c.fillRect(190,340,280,180);
+    c.restore();
+    c.restore();
+  });
+
+  /* --- the shaft: light you can see because the room is dusty --- */
+  L(24, function(c){
+    c.globalCompositeOperation='lighter';
+    c.beginPath(); c.moveTo(1080,-60); c.lineTo(1580,-60); c.lineTo(1180,900); c.lineTo(430,900); c.closePath();
+    c.fillStyle = grad(c,1400,0,700,900,[[0,'rgba(255,224,176,.30)'],[.45,'rgba(255,206,150,.09)'],[1,'rgba(255,196,136,0)']]);
+    c.fill();
+  }, 'lighter');
+  L(1.2, function(c){
+    c.globalCompositeOperation='lighter';
+    const r = rng(551);
+    for(let i=0;i<95;i++){
+      const t=r(), x=1300-t*430+r()*260, y=t*620+r()*70, s=0.6+r()*1.7;
+      /* fade them out as they drift off the lit side */
+      const a = (0.05+r()*0.26) * Math.min(1, Math.max(0.15,(x-620)/560));
+      c.fillStyle='rgba(255,236,200,'+a.toFixed(3)+')';
+      c.beginPath(); c.arc(x,y,s,0,7); c.fill();
+    }
+  }, 'lighter');
+
+  /* --- foreground: something between us and the room --- */
+  L(16, function(c){
+    if(NB){                       /* looking in from the doorway instead */
+      box(c,-40,0,150,900, grad(c,-40,0,110,0,[[0,'rgba(10,6,3,.96)'],[1,'rgba(10,6,3,0)']]));
+      box(c,1500,0,160,900, grad(c,1500,0,1660,0,[[0,'rgba(10,6,3,0)'],[1,'rgba(10,6,3,.9)']]));
+      return;
+    }
+    c.beginPath(); c.moveTo(-60,812); c.lineTo(452,796); c.lineTo(500,900); c.lineTo(-60,900); c.closePath();
+    c.fillStyle = grad(c,0,796,0,900,[[0,'#3a2717'],[1,'#120b06']]); c.fill();
+    box(c,-60,796,560,7,'rgba(255,214,160,.28)');
+    ell(c,214,800,86,26,'#6f665a'); ell(c,214,794,78,21,'#2e2822');
+    box(c,1540,0,120,900, grad(c,1540,0,1660,0,[[0,'rgba(12,7,4,.5)'],[1,'rgba(12,7,4,.95)']]));
+  });
+}
+
+/* ---------------------------------------------------------------
+   Motion goes on a second canvas in the SAME design space, so the
+   steam registers exactly with the pot the camera pass rendered.
+   Sprites are pre-rendered once — no per-frame gradients.
+   --------------------------------------------------------------- */
+function sprite(size, paint){
+  const s = document.createElement('canvas'); s.width = s.height = size;
+  paint(s.getContext('2d'), size); return s;
+}
+const PUFF = sprite(128, function(c,n){
+  const g = c.createRadialGradient(n/2,n/2,0,n/2,n/2,n/2);
+  g.addColorStop(0,'rgba(255,246,230,.55)'); g.addColorStop(.45,'rgba(255,240,218,.16)');
+  g.addColorStop(1,'rgba(255,236,210,0)'); c.fillStyle=g; c.fillRect(0,0,n,n);
+});
+const TONGUE = sprite(64, function(c,n){
+  const g = c.createRadialGradient(n/2,n*.62,0,n/2,n*.62,n/2);
+  g.addColorStop(0,'rgba(190,220,255,.95)'); g.addColorStop(.35,'rgba(70,132,255,.6)');
+  g.addColorStop(1,'rgba(43,92,230,0)'); c.fillStyle=g; c.fillRect(0,0,n,n);
+});
+
+function steamRig(host, cfg){
+  cfg = cfg || {};
+  const ox0 = cfg.x !== undefined ? cfg.x : 330;   /* pot rim, design space */
+  const oy0 = cfg.y !== undefined ? cfg.y : 306;
+  const cvs = document.createElement('canvas');
+  cvs.className = 'shot shot--anim'; cvs.setAttribute('aria-hidden','true');
+  host.appendChild(cvs);
+  const ctx = cvs.getContext('2d');
+  const r = rng(2024);
+  const P = Array.from({length: 26}, function(){
+    return {t: r(), sp: .12 + r()*.16, dx: (r()-.5)*1.4, w: .5 + r()*.7, ph: r()*6.28};
+  });
+  let W=0, H=0, s=1, ox=0, oy=0;
+  function size(){
+    const b = host.getBoundingClientRect(); if(!b.width) return false;
+    const dpr = Math.min(1.5, window.devicePixelRatio||1);
+    W = Math.min(1500, Math.round(b.width*dpr)); H = Math.round(W*(b.height/b.width));
+    if(!W||!H) return false;
+    cvs.width=W; cvs.height=H; s = Math.max(W/1600,H/900);
+    ox = (W-1600*s)/2; oy = (H-900*s)/2; return true;
+  }
+  if(!size()) return;
+  let t0 = performance.now();
+  function frame(now){
+    const dt = Math.min(50, now - t0)/1000; t0 = now;
+    ctx.setTransform(1,0,0,1,0,0); ctx.clearRect(0,0,W,H);
+    ctx.setTransform(s,0,0,s,ox,oy);
+    ctx.globalCompositeOperation = 'lighter';
+    /* flame, licking out from under the pot */
+    const fl = 0.82 + Math.sin(now/90)*0.10 + Math.sin(now/37)*0.05;
+    for(let i=0;i<5;i++){
+      const a = -0.5 + i*0.25, w = 58*fl*(0.7+0.3*Math.sin(now/70+i));
+      ctx.drawImage(TONGUE, ox0 - 62 + i*30 - w/2, 396 - w*0.45, w, w*0.95);
+    }
+    /* steam */
+    for(let i=0;i<P.length;i++){
+      const p = P[i];
+      p.t += p.sp*dt; if(p.t > 1) p.t -= 1;
+      const k = p.t, life = k<.12 ? k/.12 : (1-k)/.88;
+      const y = oy0 - k*230, drift = Math.sin(p.ph + k*3.4)*26*p.w + p.dx*k*70;
+      const sz = (44 + k*180) * p.w;
+      ctx.globalAlpha = Math.max(0, life) * 0.72;
+      ctx.drawImage(PUFF, ox0 + drift - sz/2, y - sz/2, sz, sz);
+    }
+    ctx.globalAlpha = 1;
+    raf = requestAnimationFrame(frame);
+  }
+  let raf;
+  if(RM){ frame(performance.now()); cancelAnimationFrame(raf); }
+  else raf = requestAnimationFrame(frame);
+  let rt; addEventListener('resize', function(){ clearTimeout(rt); rt=setTimeout(size,260); }, {passive:true});
+}
+
+/* --------------------------- shoot it --------------------------- */
+Photo.shoot($('#heroShot'), function(env){ drawKitchen(env, false); }, {
+  alt:'A Kenyan kitchen in afternoon light: a black freestanding Hearth cooker, a sufuria on the lit front burner, steam rising.',
+  bloom:.19, lift:.038, gamma:.92, ca:.65, vig:.58, grain:13, warm:1.05
+});
+steamRig($('#heroShot'));
+
+Photo.shoot($('#s6scene'), function(env){ drawKitchen(env, true, 'nairobi'); }, {
+  alt:'A Nairobi kitchen: barred window, tiled splashback, stainless Hearth cooker and a 13kg gas cylinder.',
+  bloom:.15, lift:.042, gamma:.94, ca:.5, vig:.46, grain:11, warm:.8
+});
+steamRig($('#s6scene'), {x:592, y:306});
+
+</script>

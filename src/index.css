@@ -1,0 +1,144 @@
+@import "tailwindcss";
+
+/* ============================================================
+   HEARTH — design tokens
+   One rule: the only saturated colour in the brand is the blue
+   of the gas flame. Everything else is soot, ash, clay, bone.
+   ============================================================ */
+@theme {
+  --color-soot:    #14110E;
+  --color-soot-2:  #0C0A08;
+  --color-soot-3:  #070605;
+  --color-ash:     #2A241D;
+  --color-ash-2:   #3C342B;
+  --color-bone:    #EFE7DA;
+  --color-paper:   #F7F2E9;
+  --color-clay:    #A8724B;
+  --color-clay-dp: #7A4F30;
+  --color-smoke:   #8A7F72;
+  --color-smoke-2: #B6AA9B;
+  --color-flame:   #2B5CE6;
+  --color-flame-hi:#7FB2FF;
+  --color-ember:   #E86A2A;
+
+  --font-display: "Instrument Serif", Georgia, "Times New Roman", serif;
+  --font-sans: "Archivo", "Helvetica Neue", Arial, sans-serif;
+  --font-hand: "Caveat", "Segoe Script", cursive;
+  --font-mono: "JetBrains Mono", ui-monospace, monospace;
+
+  --ease-hearth: cubic-bezier(.16,.84,.24,1);
+  --spine-w: clamp(44px, 4.4vw, 66px);
+}
+
+@layer base {
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+  body {
+    margin: 0;
+    background: var(--color-soot);
+    color: var(--color-bone);
+    font-family: var(--font-sans);
+    font-size: 15px;
+    line-height: 1.55;
+    font-variation-settings: "wdth" 100;
+    overflow-x: hidden;
+    -webkit-font-smoothing: antialiased;
+  }
+  body.locked { overflow: hidden; }
+  img { max-width: 100%; }
+  a { color: inherit; text-decoration: none; }
+  button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
+  :focus-visible { outline: 2px solid var(--color-flame-hi); outline-offset: 3px; border-radius: 1px; }
+  ::selection { background: var(--color-flame); color: #fff; }
+  input, textarea { font: inherit; }
+  /* the page hides the system cursor only where a custom one is drawn */
+  @media (hover: hover) and (pointer: fine) {
+    body.has-cursor, body.has-cursor * { cursor: none; }
+  }
+}
+
+@layer components {
+  .disp {
+    font-family: var(--font-display);
+    font-weight: 400;
+    line-height: .83;
+    letter-spacing: -.022em;
+    text-wrap: balance;
+  }
+  .lab {
+    font-size: 10px; font-weight: 600; letter-spacing: .24em;
+    text-transform: uppercase; font-variation-settings: "wdth" 92;
+    color: var(--color-smoke-2);
+  }
+  .hand {
+    font-family: var(--font-hand);
+    font-size: clamp(17px, 1.5vw, 22px);
+    color: var(--color-clay);
+    display: inline-block;
+    transform: rotate(-3.5deg);
+  }
+  .num { font-variant-numeric: tabular-nums; }
+  .rule { border-color: rgba(239,231,218,.14); }
+
+  /* hairline field used across auth + checkout */
+  .field {
+    width: 100%;
+    background: rgba(239,231,218,.035);
+    border: 1px solid rgba(239,231,218,.16);
+    border-radius: 2px;
+    padding: 15px 16px;
+    color: var(--color-bone);
+    letter-spacing: .01em;
+    transition: border-color .3s var(--ease-hearth), background .3s var(--ease-hearth);
+  }
+  .field::placeholder { color: rgba(239,231,218,.3); }
+  .field:focus {
+    outline: none;
+    border-color: var(--color-flame-hi);
+    background: rgba(127,178,255,.05);
+  }
+  .field-err { border-color: rgba(232,106,42,.75); background: rgba(232,106,42,.06); }
+}
+
+/* ---- film grain, everywhere, always ---------------------- */
+.grain {
+  position: fixed; inset: -120px; z-index: 9000; pointer-events: none; opacity: .4;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='.82' numOctaves='3' stitchTiles='stitch'/><feColorMatrix type='saturate' values='0'/></filter><rect width='200' height='200' filter='url(%23n)' opacity='.5'/></svg>");
+  mix-blend-mode: overlay;
+  animation: grainshift 6s steps(6) infinite;
+}
+@keyframes grainshift {
+  0%{transform:translate(0,0)} 20%{transform:translate(-14px,7px)} 40%{transform:translate(9px,-11px)}
+  60%{transform:translate(-7px,-6px)} 80%{transform:translate(12px,9px)} 100%{transform:translate(0,0)}
+}
+.vig {
+  position: fixed; inset: 0; z-index: 8990; pointer-events: none;
+  box-shadow: inset 0 0 clamp(90px,18vw,300px) rgba(12,10,8,.55);
+}
+
+/* ---- flame flicker (SVG groups) -------------------------- */
+.flame { animation: flick 1.5s ease-in-out infinite; transform-box: fill-box; }
+.flame--b { animation-duration: 1.15s; animation-delay: -.4s; }
+@keyframes flick {
+  0%,100% { opacity: .92; transform: scaleY(1); }
+  42%     { opacity: 1;   transform: scaleY(1.1); }
+  68%     { opacity: .82; transform: scaleY(.94); }
+}
+
+/* ---- steam ----------------------------------------------- */
+.steam { position: absolute; pointer-events: none; }
+.steam i {
+  position: absolute; bottom: 0; width: 8px; height: 8px; border-radius: 50%;
+  background: radial-gradient(closest-side, rgba(255,246,232,.5), transparent);
+  animation: rise linear infinite;
+}
+@keyframes rise {
+  0%   { opacity: 0; transform: translate(0,0) scale(.5); }
+  18%  { opacity: .6; }
+  100% { opacity: 0; transform: translate(var(--dx,0), -160px) scale(2.6); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain, .flame, .steam i { animation: none !important; }
+  html { scroll-behavior: auto; }
+}
