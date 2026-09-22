@@ -1,6 +1,6 @@
 import { useRef, useState, useCallback } from 'react'
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
-import { SHOTS, src, srcSet } from '../data/media.js'
+import { Fascia, Grid, Ring } from './Drawn.jsx'
 import { LEVELS, SPECS } from '../data/products.js'
 import { Lines, Rise } from './Type.jsx'
 import { EASE, viewport } from '../lib/motion.js'
@@ -10,9 +10,9 @@ import { clamp } from '../lib/utils.js'
    CHAPTER 04 — HOW IT BEHAVES
    ----------------------------------------------------------------------------
    The knob is the page's one real control. Drag it, or use the arrow keys,
-   and the photograph behind it changes exposure and crop the way a burner
-   actually changes when you open the gas — the frame tightens and the image
-   gains contrast. The flame is a photograph, so nothing here needs to glow.
+   and the burner beside it does what a burner actually does when you open the
+   gas: the flames lengthen at every port and the crown creeps closer. It is
+   drawn, so the drawing answers the control exactly — nothing here glows.
    ========================================================================== */
 
 export default function Mechanics() {
@@ -41,22 +41,15 @@ export default function Mechanics() {
           transition={{ duration: 1.25, ease: EASE }}
           className="relative m-0 aspect-[16/11] overflow-hidden bg-soot-2"
         >
-          <motion.img
-            src={src(SHOTS.flameWide, 1600)}
-            srcSet={srcSet(SHOTS.flameWide, [700, 1100, 1600, 2100])}
-            sizes="(max-width: 1024px) 100vw, 58vw"
-            alt={SHOTS.flameWide.alt}
-            loading="lazy"
-            className="absolute inset-0 h-full w-full object-cover"
-            animate={{
-              scale: 1.06 + k * 0.16,
-              filter: `saturate(${0.42 + k * 0.62}) contrast(${1.04 + k * 0.3}) brightness(${0.4 + k * 0.72})`,
-            }}
+          <Grid step={30} />
+          <motion.div
+            className="absolute inset-0 grid place-items-center p-[7%]"
+            animate={{ scale: 0.94 + k * 0.12 }}
             transition={{ duration: 0.85, ease: EASE }}
             style={{ y: reduce ? 0 : imgY }}
-          />
-          <div className="pointer-events-none absolute inset-0 bg-soot/20 mix-blend-multiply" />
-
+          >
+            <Ring lit={k} label={`The burner at ${LEVELS[level][0]}`} />
+          </motion.div>
           {/* drawn annotations, the way a parts diagram is labelled */}
           {[
             ['left-[5%] top-[16%]', <>Brass crown — <i className="italic text-flame-hi">one casting</i></>],
@@ -73,7 +66,7 @@ export default function Mechanics() {
             </motion.span>
           ))}
           <span className="absolute bottom-3 left-4 text-[9px] uppercase tracking-[0.2em] text-bone/45">
-            Plate 06 — wok ring, full
+            Plate 06 — wok ring, {LEVELS[level][0].toLowerCase()}
           </span>
         </motion.figure>
 
@@ -100,11 +93,11 @@ export default function Mechanics() {
             </Rise>
           ))}
 
-          <Rise i={4} className="relative m-0 aspect-[16/7] overflow-hidden">
-            <img src={src(SHOTS.knobRow, 1200)} srcSet={srcSet(SHOTS.knobRow, [560, 900, 1200])}
-              sizes="40vw" alt={SHOTS.knobRow.alt} loading="lazy"
-              className="absolute inset-0 h-full w-full object-cover"
-              style={{ filter: 'grayscale(1) contrast(1.16) brightness(0.72)' }} />
+          <Rise i={4} className="relative m-0 aspect-[16/7] overflow-hidden bg-soot-2">
+            <Grid step={22} />
+            <div className="absolute inset-0 grid place-items-center p-[4%]">
+              <Fascia n={5} level={level} />
+            </div>
             <span className="absolute bottom-2.5 left-3.5 text-[9px] uppercase tracking-[0.2em] text-bone/70">
               Plate 07 — fascia, as tooled
             </span>

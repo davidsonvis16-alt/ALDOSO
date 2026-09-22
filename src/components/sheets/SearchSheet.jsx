@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { PRODUCTS } from '../../data/products.js'
-import { src } from '../../data/media.js'
+import Cooker from '../Cooker.jsx'
 import { EASE } from '../../lib/motion.js'
 import { KES } from '../../lib/utils.js'
 import Sheet, { CloseX } from './Sheet.jsx'
@@ -61,10 +61,8 @@ export default function SearchSheet({ open, onClose }) {
               initial={{ opacity: 0, y: 14 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }}
               transition={{ duration: 0.45, ease: EASE, delay: i * 0.03 }}
               className="group flex w-full items-center gap-4 border-b border-bone/10 p-3 text-left transition-colors hover:bg-bone/5">
-              <span className="relative h-14 w-20 shrink-0 overflow-hidden bg-soot-2">
-                <img src={src(p.shot, 300)} alt="" loading="lazy"
-                  className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-110"
-                  style={{ filter: 'saturate(0.7) brightness(0.62)' }} />
+              <span className="relative grid h-14 w-20 shrink-0 place-items-center overflow-hidden bg-soot-2">
+                <Cooker cfg={p.svg} className="w-[52%] transition-transform duration-700 group-hover:scale-110" />
               </span>
               <span className="min-w-0 flex-1">
                 <b className="block truncate text-[14px] font-semibold text-bone">{p.name}</b>

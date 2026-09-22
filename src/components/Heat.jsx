@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
-import { SHOTS, src, srcSet } from '../data/media.js'
+import { Fascia, Grid, Pot, Ring } from './Drawn.jsx'
+import Cooker from './Cooker.jsx'
 import { Lines, Rise } from './Type.jsx'
 import { EASE } from '../lib/motion.js'
 
@@ -17,17 +18,26 @@ import { EASE } from '../lib/motion.js'
    last plates parked off-screen. Measuring means the whole row clears the
    viewport at the same pace on any width.
 
-   Reduced motion gets the same photographs as an ordinary stacked grid.
+   Reduced motion gets the same plates as an ordinary stacked grid.
    ========================================================================== */
 
 const RAIL = [
-  { shot: SHOTS.ring,    n: '01', cap: 'The ring, 4.2 kW',            w: 'w-[74vw] sm:w-[40vw]', h: 'h-[44vh] sm:h-[54vh]', drift: -30, grade: 'cool' },
-  { shot: SHOTS.onions,  n: '02', cap: 'Onions, cut small — as taught', w: 'w-[62vw] sm:w-[26vw]', h: 'h-[52vh] sm:h-[68vh]', drift: 42 },
+  { key: 'ring',   n: 'Plate 01', cap: 'The ring, 4.2 kW',          w: 'w-[74vw] sm:w-[40vw]', h: 'h-[44vh] sm:h-[54vh]', drift: -30, pad: '12%' },
+  { key: 'cooker', n: 'Plate 02', cap: 'The 60 × 60, black enamel', w: 'w-[62vw] sm:w-[26vw]', h: 'h-[52vh] sm:h-[68vh]', drift: 42,  pad: '8%' },
   { pull: true },
-  { shot: SHOTS.simmer,  n: '03', cap: 'Githeri, hour two',            w: 'w-[70vw] sm:w-[34vw]', h: 'h-[38vh] sm:h-[46vh]', drift: -18 },
-  { shot: SHOTS.dials,   n: '04', cap: 'Knob, brushed steel',          w: 'w-[58vw] sm:w-[22vw]', h: 'h-[48vh] sm:h-[62vh]', drift: 34 },
-  { shot: SHOTS.griddle, n: '05', cap: 'Chapati, second side',         w: 'w-[76vw] sm:w-[38vw]', h: 'h-[46vh] sm:h-[56vh]', drift: -26 },
+  { key: 'fascia', n: 'Plate 03', cap: 'Fascia, as tooled',         w: 'w-[70vw] sm:w-[34vw]', h: 'h-[34vh] sm:h-[42vh]', drift: -18, pad: '9%' },
+  { key: 'low',    n: 'Plate 04', cap: 'The same ring, barely on',  w: 'w-[58vw] sm:w-[22vw]', h: 'h-[40vh] sm:h-[44vh]', drift: 34,  pad: '10%' },
+  { key: 'pot',    n: 'Plate 05', cap: 'Githeri, hour two',         w: 'w-[76vw] sm:w-[38vw]', h: 'h-[38vh] sm:h-[46vh]', drift: -26, pad: '9%' },
 ]
+
+/* each plate's subject, drawn — see components/Drawn.jsx */
+const SUBJECT = {
+  ring: <Ring lit={0.95} label="A gas burner at full, seen from above" />,
+  low: <Ring lit={0.18} label="The same burner turned down to a simmer" />,
+  fascia: <Fascia n={5} level={4} />,
+  pot: <Pot />,
+  cooker: <Cooker className="w-[70%]" cfg={{ type: 'free', finish: 'black', w: 6, burners: 4, electric: 1, size: 1 }} />,
+}
 
 function RailPlate({ item, progress, reduce }) {
   const y = useTransform(progress, [0, 1], [item.drift, -item.drift])
@@ -45,22 +55,13 @@ function RailPlate({ item, progress, reduce }) {
   return (
     <figure className={`${item.w} shrink-0`}>
       <div className={`relative ${item.h} overflow-hidden bg-soot-2`}>
-        <motion.img
-          src={src(item.shot, 1400)}
-          srcSet={srcSet(item.shot, [560, 900, 1400])}
-          sizes="45vw"
-          alt={item.shot.alt}
-          loading="lazy"
-          className="absolute inset-0 h-full w-full object-cover"
-          style={{
-            y: reduce ? 0 : y,
-            scale: 1.16,
-            filter: item.grade === 'cool'
-              ? 'saturate(0.66) contrast(1.16) brightness(0.8)'
-              : 'saturate(0.8) contrast(1.06) brightness(0.84) sepia(0.1)',
-          }}
-        />
-        <div className="pointer-events-none absolute inset-0 bg-soot/25 mix-blend-multiply" />
+        <Grid step={26} />
+        <motion.div
+          className="absolute inset-0 grid place-items-center"
+          style={{ y: reduce ? 0 : y, padding: item.pad }}
+        >
+          {SUBJECT[item.key]}
+        </motion.div>
       </div>
       <figcaption className="mt-3 flex items-baseline justify-between gap-4 border-t border-bone/14 pt-2.5">
         <span className="text-[11px] text-smoke-2">{item.cap}</span>
@@ -144,7 +145,7 @@ function Head() {
       </div>
       <Rise i={2} className="max-w-[38ch]">
         <p className="text-[13.5px] leading-relaxed text-bone/60">
-          Not in the plating. Not in the photograph. In the eleven seconds between
+          Not in the plating. Not in the styling. In the eleven seconds between
           the knob turning and the blue catching.
         </p>
       </Rise>

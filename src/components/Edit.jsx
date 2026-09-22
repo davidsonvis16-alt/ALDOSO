@@ -1,20 +1,19 @@
 import { useState } from 'react'
 import { motion, AnimatePresence, LayoutGroup } from 'framer-motion'
 import { PRODUCTS, FILTERS } from '../data/products.js'
-import { src, srcSet } from '../data/media.js'
 import { Lines, Rise } from './Type.jsx'
 import Cooker from './Cooker.jsx'
+import { Grid } from './Drawn.jsx'
 import { EASE, viewport } from '../lib/motion.js'
 import { KES, cx } from '../lib/utils.js'
 
 /* ============================================================================
    CHAPTER 02 — THE EDIT
    ----------------------------------------------------------------------------
-   Seven cookers. Each card carries two images: the drawn elevation, which is
-   how the range reads as one family, and a real photograph of a kitchen it
-   would live in, which wipes up from below on hover while the elevation lifts
-   clear of it. Filtering re-flows the grid with a layout animation instead of
-   dimming rows out.
+   Seven cookers, one drawing each, so the range reads as one family on one
+   shelf. On hover the measured ground wipes up from below and the elevation
+   lifts clear of it — the way a part is lifted off its drawing. Filtering
+   re-flows the grid with a layout animation instead of dimming rows out.
    ========================================================================== */
 
 export default function Edit({ onAdd }) {
@@ -58,7 +57,7 @@ export default function Edit({ onAdd }) {
             <p className="disp text-[clamp(22px,2.3vw,34px)] leading-[0.98] text-bone">
               Seven cookers. One idea:<br />the heat should do what<br />your hand just asked it to.
             </p>
-            <span className="hand mt-5">Photographed in Nairobi, dry season.</span>
+            <span className="hand mt-5">Drawn in Nairobi, dry season.</span>
           </motion.div>
         </motion.div>
       </LayoutGroup>
@@ -88,17 +87,11 @@ function Card({ p, i, onAdd }) {
     >
       {/* --- stage -------------------------------------------------------- */}
       <div className="relative aspect-[4/5] overflow-hidden border border-bone/10 bg-soot">
-        {/* the real kitchen, wiped up from below */}
+        {/* the measured ground, wiped up from below */}
         <div className="absolute inset-0 [clip-path:inset(100%_0_0_0)] transition-[clip-path] duration-[900ms] ease-[cubic-bezier(.16,.84,.24,1)] group-hover:[clip-path:inset(0_0_0_0)]">
-          <img
-            src={src(p.shot, 900)}
-            srcSet={srcSet(p.shot, [480, 900, 1200])}
-            sizes="(max-width: 1024px) 50vw, 33vw"
-            alt={p.shot.alt}
-            loading="lazy"
-            className="h-full w-full object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(.16,.84,.24,1)] group-hover:scale-105"
-            style={{ filter: 'saturate(0.72) contrast(1.1) brightness(0.52) sepia(0.1)', transform: 'scale(1.14)' }}
-          />
+          <div className="absolute inset-0 bg-soot-2" />
+          <Grid step={22} />
+          <div className="absolute inset-x-0 bottom-0 h-1/3 bg-gradient-to-t from-soot-2 to-transparent" />
         </div>
 
         <span className="num absolute left-3.5 top-3 z-20 font-mono text-[10px] text-bone/45">{p.no}</span>
@@ -108,7 +101,7 @@ function Card({ p, i, onAdd }) {
           </span>
         )}
 
-        {/* the elevation, lifting clear of the photograph */}
+        {/* the elevation, lifting clear of the ground */}
         <div className="absolute inset-0 z-10 grid place-items-end justify-center pb-[6%] transition-transform duration-[900ms] ease-[cubic-bezier(.16,.84,.24,1)] group-hover:-translate-y-[3%]">
           <Cooker cfg={p.svg} style={{ width: `${Math.round(p.svg.size * 78)}%` }} />
         </div>

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import Sheet, { CloseX } from './Sheet.jsx'
 import { Wipe } from '../Mpesa.jsx'
-import { SHOTS, src, srcSet } from '../../data/media.js'
+import { Grid, Ring } from '../Drawn.jsx'
 import { auth } from '../../lib/api.js'
 import { EASE } from '../../lib/motion.js'
 import { cx } from '../../lib/utils.js'
@@ -58,16 +58,12 @@ export default function AuthSheet({ open, onClose }) {
   return (
     <Sheet open={open} onClose={onClose} label="Sign in" width="max-w-[880px]">
       <div className="grid h-full grid-cols-1 md:grid-cols-[1fr_1.1fr]">
-        {/* --- the picture half, kept on desktop --------------------------- */}
-        <div className="relative hidden overflow-hidden md:block">
-          <img
-            src={src(SHOTS.melonNoodles, 1100)}
-            srcSet={srcSet(SHOTS.melonNoodles, [560, 900, 1200])}
-            sizes="40vw"
-            alt={SHOTS.melonNoodles.alt}
-            className="absolute inset-0 h-full w-full object-cover"
-            style={{ filter: 'saturate(0.7) contrast(1.12) brightness(0.55) sepia(0.12)' }}
-          />
+        {/* --- the drawn half, kept on desktop ---------------------------- */}
+        <div className="relative hidden overflow-hidden bg-soot-2 md:block">
+          <Grid step={28} />
+          <div className="absolute inset-0 grid place-items-center p-[14%] pb-[42%]">
+            <Ring lit={0.6} label="A burner, half open" />
+          </div>
           <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-soot-3 via-soot-3/30 to-transparent" />
           <div className="absolute bottom-0 left-0 p-[clamp(18px,2.4vw,32px)]">
             <p className="disp text-[clamp(26px,2.8vw,40px)] leading-[0.95] text-bone">
@@ -77,7 +73,7 @@ export default function AuthSheet({ open, onClose }) {
               Orders, warranty dates, which burner you replaced and when.
             </p>
             <span className="mt-5 block text-[9px] uppercase tracking-[0.2em] text-bone/35">
-              Photograph — {SHOTS.melonNoodles.by}
+              Plate 11 — the ring, half open
             </span>
           </div>
         </div>

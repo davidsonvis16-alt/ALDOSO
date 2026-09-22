@@ -1,40 +1,39 @@
-/* The catalogue. Seven cookers, drawn as elevations and shot in real kitchens. */
-import { SHOTS } from './media.js'
+/* The catalogue. Seven cookers, each drawn as an elevation. */
 
 export const PRODUCTS = [
   { id: 'roch6060', no: '01', name: 'Roch 60 × 60', sub: '3 Gas + 1 Electric', price: 32500,
     spec: '60×60 · Oven + grill · Black enamel', tag: 'The house cooker',
-    kind: ['free', 'elec'], shot: SHOTS.homeCook,
+    kind: ['free', 'elec'],
     svg: { type: 'free', finish: 'black', w: 6, burners: 4, electric: 1, size: 1.0 } },
 
   { id: 'rochgas', no: '02', name: 'Roch Full Gas', sub: '4 Burner standing', price: 18500,
     spec: '50×55 · Gas oven · Ivory', tag: '',
-    kind: ['free'], shot: SHOTS.twoCooks,
+    kind: ['free'],
     svg: { type: 'free', finish: 'ivory', w: 4, burners: 4, electric: 0, size: .86 } },
 
   { id: 'roch3b', no: '03', name: 'Roch 3-Burner', sub: 'Tabletop', price: 2600,
     spec: 'Tabletop · Enamel pan supports', tag: 'Under 3K',
-    kind: ['table'], shot: SHOTS.outside,
+    kind: ['table'],
     svg: { type: 'table', finish: 'black', burners: 3, size: .8 } },
 
   { id: 'mika6060', no: '04', name: 'Mika 60 × 60', sub: '3 Gas + 1 Electric', price: 37500,
     spec: '60×60 · Fan oven · Inox', tag: 'Editor’s pick',
-    kind: ['free', 'elec'], shot: SHOTS.counter,
+    kind: ['free', 'elec'],
     svg: { type: 'free', finish: 'steel', w: 6, burners: 4, electric: 1, size: 1.0 } },
 
   { id: 'ss3b', no: '05', name: 'Stainless 3-Burner', sub: 'Tabletop', price: 3000,
     spec: 'Tabletop · Brushed steel top', tag: '',
-    kind: ['table'], shot: SHOTS.pouring,
+    kind: ['table'],
     svg: { type: 'table', finish: 'steel', burners: 3, size: .8 } },
 
   { id: 'amaze31', no: '06', name: 'Amaze 3+1', sub: 'Standing cooker', price: 19500,
     spec: '50×55 · Gas oven · Hotplate', tag: '',
-    kind: ['free', 'elec'], shot: SHOTS.stirring,
+    kind: ['free', 'elec'],
     svg: { type: 'free', finish: 'black', w: 4, burners: 4, electric: 1, size: .9 } },
 
   { id: 'euroken31', no: '07', name: 'Euroken 3+1', sub: 'Standing cooker', price: 21500,
     spec: '50×55 · Rotisserie · Inox', tag: '',
-    kind: ['free', 'elec'], shot: SHOTS.melon,
+    kind: ['free', 'elec'],
     svg: { type: 'free', finish: 'steel', w: 4, burners: 4, electric: 1, size: .9 } },
 ]
 

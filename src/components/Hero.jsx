@@ -1,18 +1,19 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
-import { src, srcSet, SHOTS } from '../data/media.js'
+import { Grid, Ring } from './Drawn.jsx'
 import { Lines, Rise } from './Type.jsx'
 import { EASE } from '../lib/motion.js'
 
 /* ============================================================================
    HERO
    ----------------------------------------------------------------------------
-   The photograph is a real one — a hand turning flatbread over a live blue
-   ring — and it is not decoration: it is the argument the whole brand makes.
+   The plate is a drawing, not a photograph: a burner seen from above, lit, on
+   a measured ground. It is not decoration — the blue ring is the argument the
+   whole brand makes, and it is drawn so it reads the same on every screen.
 
    Three things move, all tied to the same scroll:
      · the plate itself contracts from full bleed into a framed rectangle,
-     · the picture inside drifts up slower than the frame,
+     · the drawing inside drifts up slower than the frame,
      · the headline leaves upward while the strapline holds a beat longer.
    Nothing fades on its own. Nothing pulses.
    ========================================================================== */
@@ -36,21 +37,23 @@ export default function Hero() {
         className="absolute inset-0 overflow-hidden bg-soot-2"
         style={{ left: still(inset), right: still(inset), bottom: still(inset) }}
       >
-        <motion.img
-          src={src(SHOTS.hero, 2000)}
-          srcSet={srcSet(SHOTS.hero, [900, 1400, 2000, 2600])}
-          sizes="100vw"
-          alt={SHOTS.hero.alt}
-          fetchPriority="high"
-          className="absolute inset-0 h-full w-full object-cover"
-          style={{
-            y: still(imgY), scale: still(imgScale),
-            filter: 'saturate(0.68) contrast(1.16) brightness(0.62)',
-          }}
+        <Grid step={34} className="opacity-90" />
+        <motion.div
+          className="absolute -right-[12%] -top-[18%] w-[92vh] max-w-[1100px]"
+          style={{ y: still(imgY), scale: still(imgScale) }}
           initial={{ scale: 1.3, opacity: 0 }}
           animate={{ scale: 1.06, opacity: 1 }}
           transition={{ duration: 2.1, ease: EASE, delay: 0.25 }}
-        />
+        >
+          <Ring lit={0.92} label="A gas burner, lit, seen from above" />
+        </motion.div>
+
+        {/* the measured callout, the way the drawing would be dimensioned */}
+        <svg aria-hidden="true" className="absolute inset-0 hidden h-full w-full lg:block">
+          <line x1="0" x2="100%" y1="62%" y2="62%" stroke="rgba(239,231,218,.08)" strokeWidth="1" />
+          <line x1="72%" x2="72%" y1="0" y2="100%" stroke="rgba(239,231,218,.08)" strokeWidth="1" />
+        </svg>
+
         {/* legibility: a flat gradient ramp, not a vignette bloom */}
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-soot-2 via-soot-2/30 to-soot-2/55" />
         <div className="pointer-events-none absolute inset-0 bg-gradient-to-r from-soot-2/75 via-transparent to-transparent" />

@@ -4,7 +4,7 @@
    Rules this page keeps to:
      · Nothing glows, blinks or floats. Movement is mass moving, not light.
      · Type arrives from behind a hard mask, never by fading in place.
-     · Images are uncovered by a wipe while the picture inside settles back
+     · Drawings are uncovered by a wipe while the plate inside settles back
        from a slight over-scale — the way a printed plate is revealed.
      · Every duration is long enough to read (0.7s–1.4s) and eased out hard.
    ========================================================================== */
@@ -31,7 +31,7 @@ export const rise = {
   }),
 }
 
-/* A photograph being uncovered. Pair with `plateInner` on the <img>. */
+/* A plate being uncovered. Pair with `plateInner` on the drawing inside. */
 export const plate = {
   hidden: { clipPath: 'inset(0% 0% 100% 0%)' },
   show: { clipPath: 'inset(0% 0% 0% 0%)', transition: { duration: 1.25, ease: EASE } },

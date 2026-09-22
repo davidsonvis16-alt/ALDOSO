@@ -46,25 +46,27 @@ nothing — the fuses short-circuit first, on purpose.
 - **Palette** — soot, ash, bone, clay. The only saturated colour in the brand is
   the blue of the gas ring, and it appears as ink, never as light.
 - **Motion** — nothing glows, blinks, floats or pulses. Type arrives from behind a
-  hard mask; photographs are uncovered by a wipe while the picture inside settles
+  hard mask; plates are uncovered by a wipe while the drawing inside settles
   back from an over-scale; Chapter 01 pins and travels sideways; the wordmark
   widens along Archivo's variable width axis rather than fading. Everything is
   reduced-motion aware.
-- **Photography** — real photographs, hand-picked: Nairobi street kitchens, a
-  Ugandan chapati griddle, a blue ring in a dark room. Credited in the footer, as
-  the Unsplash licence asks.
-- **Cooker drawings** — the seven products are drawn as SVG elevations
-  (`src/components/Cooker.jsx`) so the range reads as one family; each card
-  cross-fades to a real kitchen on hover.
+- **Drawings, not photographs** — there is no photography on the site and no
+  third-party image CDN. Every plate is SVG drawn in-house: the burner seen from
+  above (lit to whatever the knob is asking for), the fascia, the pot on the
+  ring, and the corner with the 13 kg cylinder in it — all in
+  `src/components/Drawn.jsx`, on a measured hairline ground.
+- **Cooker elevations** — the seven products are drawn as SVG elevations
+  (`src/components/Cooker.jsx`) so the range reads as one family; on hover the
+  ground wipes up and the elevation lifts clear of it.
 
 ## Layout
 
 ```
 src/
-  data/       media.js (photo manifest + credits), products.js
+  data/       products.js (the catalogue)
   lib/        motion.js (the motion language), api.js, utils.js
   components/ Hero, Heat, Edit, Story, Mechanics, Kenya, Footer,
-              Cooker, Shot, Type, Chrome, Preloader, Cursor, Mpesa, Toast
+              Cooker, Drawn, Plate, Type, Chrome, Preloader, Mpesa, Toast
               sheets/ Sheet, MenuSheet, SearchSheet, CartSheet, AuthSheet
 server/
   index.js    mounts the API, stamps every response as a demo

@@ -1,18 +1,19 @@
 import { useEffect, useRef, useState } from 'react'
 import { motion, useInView, useReducedMotion } from 'framer-motion'
-import { SHOTS, src, srcSet } from '../data/media.js'
 import { FACTS, COUNTIES } from '../data/products.js'
 import { Lines, Rise } from './Type.jsx'
-import Shot from './Shot.jsx'
+import Plate from './Plate.jsx'
+import { Corner, Pot } from './Drawn.jsx'
 import { EASE, viewport } from '../lib/motion.js'
 
 /* ============================================================================
    CHAPTER 05 — WHERE IT LIVES
    ----------------------------------------------------------------------------
-   Two real photographs of Nairobi doing exactly what the product is for, a
-   set of counted facts, and a marquee of the counties the cookers actually
-   reach. The marquee is a continuous transform, not a stepped animation, so
-   it never judders at the seam.
+   Two drawings of the room the cooker actually lives in — the corner with the
+   cylinder in it, and the pot that ends up on the ring — a set of counted
+   facts, and a marquee of the counties the cookers actually reach. The
+   marquee is a continuous transform, not a stepped animation, so it never
+   judders at the seam.
    ========================================================================== */
 export default function Kenya() {
   return (
@@ -36,17 +37,18 @@ export default function Kenya() {
         </div>
 
         <div className="mt-[clamp(30px,5vh,62px)] grid gap-[clamp(14px,2vw,28px)] sm:grid-cols-[1.6fr_1fr]">
-          <Shot shot={SHOTS.vendor} drift={7} grade="full" className="aspect-[16/10]"
-            sizes="(max-width: 640px) 100vw, 60vw">
+          <Plate className="aspect-[16/10]" grid={0} label="A Nairobi kitchen corner: cooker, cylinder, floor line">
+            <Corner />
             <span className="absolute bottom-3.5 left-4 z-10 text-[9px] uppercase tracking-[0.2em] text-bone/85">
-              Kilimani, Nairobi — 16:52
+              Kilimani, Nairobi — the corner it lives in
             </span>
             <span className="absolute right-4 top-4 z-10 text-[9px] uppercase tracking-[0.2em] text-bone/75">
               13 kg cylinder · mains optional
             </span>
-          </Shot>
-          <Shot shot={SHOTS.market} drift={10} grade="warm" className="aspect-[16/10] sm:aspect-auto"
-            sizes="(max-width: 640px) 100vw, 36vw" />
+          </Plate>
+          <Plate className="aspect-[16/10] sm:aspect-auto" grid={26} label="A pot at a simmer on a lit ring">
+            <div className="h-full w-full p-[9%]"><Pot /></div>
+          </Plate>
         </div>
 
         {/* --- counted facts ------------------------------------------------ */}

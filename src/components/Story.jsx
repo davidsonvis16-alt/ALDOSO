@@ -1,22 +1,20 @@
 import { useRef } from 'react'
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
-import { SHOTS, src, srcSet } from '../data/media.js'
+import { Fascia, Grid, Ring } from './Drawn.jsx'
 import { Rise } from './Type.jsx'
 import { EASE, viewport } from '../lib/motion.js'
 
 /* ============================================================================
    CHAPTER 03 — THE TABLE
    ----------------------------------------------------------------------------
-   Three photographs run as a single band behind the headline, and the type
-   is knocked out of them: the words are transparent, the picture shows
-   through the letterforms. As you scroll the band creeps sideways, so the
-   image inside the type keeps changing.
-
-   Browsers without background-clip:text fall back to solid bone type on a
-   dimmed band, which is still the same layout.
+   A band of three drawn rings runs behind the headline and creeps sideways as
+   you scroll, so what sits behind the letterforms keeps changing. Two of the
+   headline's lines are outlined rather than filled, which lets the band read
+   straight through them.
    ========================================================================== */
 
-const BAND = [SHOTS.prep, SHOTS.table, SHOTS.stall]
+/* the band: the same burner three times, at three settings — full, simmer, off */
+const BAND = [0.9, 0.3, 0]
 
 export default function Story() {
   const ref = useRef(null)
@@ -33,12 +31,12 @@ export default function Story() {
         style={{ x: reduce ? 0 : bandX, scale: reduce ? 1.05 : bandScale }}
         className="absolute inset-0 grid grid-cols-3"
       >
-        {BAND.map((s, i) => (
+        {BAND.map((lit, i) => (
           <div key={i} className="relative overflow-hidden">
-            <img src={src(s, 1200)} srcSet={srcSet(s, [560, 900, 1400])} sizes="34vw" alt=""
-              loading="lazy"
-              className="h-full w-full object-cover"
-              style={{ filter: 'saturate(0.7) contrast(1.12) brightness(0.72) sepia(0.14)' }} />
+            <Grid step={32} opacity={0.8} />
+            <div className="absolute inset-0 grid place-items-center p-[6%] opacity-70">
+              <Ring lit={lit} />
+            </div>
           </div>
         ))}
       </motion.div>
@@ -78,16 +76,16 @@ export default function Story() {
             </p>
           </Rise>
           <Rise i={1} className="grid grid-cols-2 gap-4 self-end">
-            {[[SHOTS.table, 'Sunday, Kayole'], [SHOTS.stall, 'Chapati, last one']].map(([s, cap]) => (
-              <figure key={cap} className="m-0">
-                <div className="relative aspect-[4/5] overflow-hidden">
-                  <img src={src(s, 800)} srcSet={srcSet(s, [480, 800, 1100])} sizes="25vw"
-                    alt={s.alt} loading="lazy"
-                    className="absolute inset-0 h-full w-full object-cover"
-                    style={{ filter: 'saturate(0.84) contrast(1.05) brightness(0.9)' }} />
+            {[['Plate 08', 'The ring, as it sits', <Ring key="r" lit={0.55} />],
+              ['Plate 09', 'Fascia, four up', <Fascia key="f" n={4} level={2} />]].map(([n, cap, art]) => (
+              <figure key={n} className="m-0">
+                <div className="relative aspect-[4/5] overflow-hidden bg-soot-2">
+                  <Grid step={24} />
+                  <div className="absolute inset-0 grid place-items-center p-[10%]">{art}</div>
                 </div>
-                <figcaption className="mt-2.5 border-t border-bone/14 pt-2 text-[10px] uppercase tracking-[0.16em] text-bone/55">
-                  {cap}
+                <figcaption className="mt-2.5 flex items-baseline justify-between gap-3 border-t border-bone/14 pt-2 text-[10px] uppercase tracking-[0.16em] text-bone/55">
+                  <span>{cap}</span>
+                  <b className="num font-mono normal-case tracking-normal text-bone/40">{n}</b>
                 </figcaption>
               </figure>
             ))}
