@@ -15,7 +15,7 @@ import { EASE } from '../lib/motion.js'
 function alreadySeen() {
   try {
     if (new URLSearchParams(location.search).has('skipIntro')) return true
-    return sessionStorage.getItem('hearth.intro') === '1'
+    return sessionStorage.getItem('aldosi.intro') === '1'
   } catch { return false }
 }
 
@@ -26,7 +26,7 @@ export default function Preloader({ onDone }) {
 
   useEffect(() => {
     if (reduce || alreadySeen()) { setGone(true); onDone?.(); return }
-    try { sessionStorage.setItem('hearth.intro', '1') } catch {}
+    try { sessionStorage.setItem('aldosi.intro', '1') } catch {}
     document.body.classList.add('locked')
     const t0 = performance.now()
     const DUR = 1700
@@ -66,14 +66,14 @@ export default function Preloader({ onDone }) {
                   transform: `translateX(-50%) translateY(${i === 0 ? '50%' : '-50%'})`,
                   fontFamily: 'Archivo, sans-serif',
                   fontWeight: 800,
-                  fontSize: 'clamp(46px,11vw,150px)',
+                  fontSize: 'clamp(18px,7vw,94px)',
                   letterSpacing: '-0.03em',
                   lineHeight: 1,
                   fontVariationSettings: `"wdth" ${62 + (n / 100) * 63}`,
                   clipPath: i === 0 ? 'inset(0 0 50% 0)' : 'inset(50% 0 0 0)',
                 }}
               >
-                HEARTH
+                ALDOSI MERCHANTS
               </div>
             </motion.div>
           ))}

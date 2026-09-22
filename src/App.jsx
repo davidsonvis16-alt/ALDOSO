@@ -22,9 +22,9 @@ const NAV_IDS = ['cook', 'discover', 'appliances', 'story']
 export default function App() {
   /* --- cart, persisted but never fatal ----------------------------------- */
   const [cart, setCart] = useState(() => {
-    try { return JSON.parse(store.get('hearth.cart') || '{}') || {} } catch { return {} }
+    try { return JSON.parse(store.get('aldosi.cart') || '{}') || {} } catch { return {} }
   })
-  useEffect(() => { store.set('hearth.cart', JSON.stringify(cart)) }, [cart])
+  useEffect(() => { store.set('aldosi.cart', JSON.stringify(cart)) }, [cart])
 
   const count = useMemo(() => Object.values(cart).reduce((a, b) => a + b, 0), [cart])
   const total = useMemo(

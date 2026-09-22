@@ -40,7 +40,7 @@ function draw(cfg, id) {
   const f = FIN[cfg.finish] || FIN.black
 
   if (cfg.type === 'table') {
-    return `<svg viewBox="0 0 320 152" role="img" aria-label="Hearth tabletop cooker" style="width:100%;height:auto;display:block">
+    return `<svg viewBox="0 0 320 152" role="img" aria-label="Aldosi Merchants tabletop cooker" style="width:100%;height:auto;display:block">
       <defs>
         <linearGradient id="${id}a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${f.top}"/><stop offset="1" stop-color="${f.topB}"/></linearGradient>
         <linearGradient id="${id}b" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${f.body}"/><stop offset="1" stop-color="${f.bodyB}"/></linearGradient>
@@ -54,12 +54,12 @@ function draw(cfg, id) {
       ${knobShape(92, 97, 13, f)}${knobShape(160, 97, 13, f)}${knobShape(228, 97, 13, f)}
       <rect x="26" y="120" width="12" height="9" rx="2" fill="#15120f"/>
       <rect x="282" y="120" width="12" height="9" rx="2" fill="#15120f"/>
-      <text x="160" y="129" text-anchor="middle" font-family="Archivo,sans-serif" font-size="7" letter-spacing="3.4" fill="${f.txt}" opacity=".5">HEARTH</text>
+      <text x="160" y="129" text-anchor="middle" font-family="Archivo,sans-serif" font-size="7" letter-spacing="1.5" fill="${f.txt}" opacity=".5">ALDOSI MERCHANTS</text>
     </svg>`
   }
 
   const lit = cfg.lit !== false
-  return `<svg viewBox="0 0 320 424" role="img" aria-label="Hearth freestanding cooker" style="width:100%;height:auto;display:block">
+  return `<svg viewBox="0 0 320 424" role="img" aria-label="Aldosi Merchants freestanding cooker" style="width:100%;height:auto;display:block">
     <defs>
       <linearGradient id="${id}a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${f.top}"/><stop offset="1" stop-color="${f.topB}"/></linearGradient>
       <linearGradient id="${id}b" x1="0" y1="0" x2="1" y2="0">
@@ -74,7 +74,7 @@ function draw(cfg, id) {
     <ellipse cx="160" cy="410" rx="140" ry="9" fill="rgba(20,17,14,.25)"/>
     <rect x="46" y="38" width="228" height="34" rx="3" fill="${f.bodyB}"/>
     <rect x="46" y="38" width="228" height="4" fill="${f.edge}" opacity=".5"/>
-    <text x="160" y="61" text-anchor="middle" font-family="Archivo,sans-serif" font-size="9" font-weight="800" letter-spacing="6" fill="${f.txt}" opacity=".62">HEARTH</text>
+    <text x="160" y="61" text-anchor="middle" font-family="Archivo,sans-serif" font-size="9" font-weight="800" letter-spacing="2.2" fill="${f.txt}" opacity=".62">ALDOSI MERCHANTS</text>
     <path d="M48 72 H272 L296 120 H24 Z" fill="url(#${id}a)"/>
     <path d="M48 72 H272 L275 79 H45 Z" fill="${f.edge}" opacity=".45"/>
     ${burner(106, 92, 26, 11, lit)}
@@ -88,11 +88,11 @@ function draw(cfg, id) {
     <circle cx="288" cy="146" r="3" fill="#E86A2A" opacity=".9"/>
     <rect x="34" y="176" width="252" height="176" rx="2" fill="rgba(0,0,0,.14)"/>
     <rect x="40" y="182" width="240" height="164" rx="2" fill="url(#${id}c)"/>
-    <rect x="52" y="194" width="216" height="140" rx="1" fill="none" stroke="rgba(255,255,255,.1)"/>
-    <path d="M52 194 L268 334" stroke="rgba(255,255,255,.055)" stroke-width="26"/>
+    <rect x="52" y="194" width="216" height="140" rx="1" fill="none" stroke="rgba(239,231,218,.1)"/>
+    <path d="M52 194 L268 334" stroke="rgba(239,231,218,.055)" stroke-width="26"/>
     <rect x="52" y="230" width="216" height="104" fill="url(#${id}d)"/>
     <rect x="32" y="168" width="256" height="9" rx="4.5" fill="${f.edge}" opacity=".92"/>
-    <rect x="32" y="168" width="256" height="3" rx="1.5" fill="#fff" opacity=".28"/>
+    <rect x="32" y="168" width="256" height="3" rx="1.5" fill="#EFE7DA" opacity=".28"/>
     <rect x="44" y="177" width="9" height="9" fill="${f.bodyB}"/><rect x="267" y="177" width="9" height="9" fill="${f.bodyB}"/>
     <rect x="24" y="360" width="272" height="18" fill="rgba(0,0,0,.3)"/>
     <rect x="34" y="378" width="16" height="16" rx="3" fill="#15120f"/>

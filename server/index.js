@@ -1,5 +1,5 @@
 /* ============================================================================
-   HEARTH — API
+   ALDOSI MERCHANTS — API
    ----------------------------------------------------------------------------
    ⚠ THIS BACKEND DOES NOT WORK, AND THAT IS ON PURPOSE.
 
@@ -33,8 +33,8 @@ app.use(express.json())
 
 // every response is stamped so no client can mistake this for production
 app.use((_req, res, next) => {
-  res.set('X-Hearth-Env', 'demo')
-  res.set('X-Hearth-Payments', 'disabled-by-design')
+  res.set('X-Aldosi-Env', 'demo')
+  res.set('X-Aldosi-Payments', 'disabled-by-design')
   next()
 })
 
@@ -44,7 +44,7 @@ app.use('/api/auth', auth)
 app.get('/api/health', (_req, res) => {
   res.json({
     ok: true,
-    service: 'hearth-api',
+    service: 'aldosi-api',
     env: 'demo',
     payments: { provider: 'daraja', live: false, reason: 'DEMO_FUSE_ACTIVE' },
     auth: { live: false, reason: 'DEMO_FUSE_ACTIVE' }
@@ -54,7 +54,7 @@ app.get('/api/health', (_req, res) => {
 app.use((_req, res) => res.status(404).json({ errorCode: '404.000.00', errorMessage: 'Resource not found' }))
 
 app.listen(PORT, () => {
-  console.log(`\n  hearth-api  →  http://localhost:${PORT}`)
+  console.log(`\n  aldosi-api  →  http://localhost:${PORT}`)
   console.log(`  payments    →  DISABLED BY DESIGN (demo fuse active)`)
   console.log(`  auth        →  DISABLED BY DESIGN (demo fuse active)\n`)
 })

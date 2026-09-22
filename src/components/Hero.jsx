@@ -71,7 +71,7 @@ export default function Hero() {
         className="relative flex h-full flex-col justify-end px-[clamp(20px,4.6vw,76px)] pb-[clamp(30px,7vh,76px)] sm:pl-[calc(var(--spine-w)+clamp(20px,4.6vw,76px))]"
       >
         <Rise className="lab" style={{ color: 'rgba(239,231,218,.62)' }}>
-          <span className="text-bone/60">Hearth &nbsp;/&nbsp; Nairobi &nbsp;/&nbsp; Est. 2014</span>
+          <span className="text-bone/60">Aldosi Merchants &nbsp;/&nbsp; Nairobi &nbsp;/&nbsp; Est. 2014</span>
         </Rise>
 
         <Lines as="h1" className="disp mt-3 text-[clamp(62px,13.5vw,224px)] text-bone" delay={0.15}>
@@ -94,7 +94,7 @@ export default function Hero() {
                 className="group inline-flex items-center gap-4 overflow-hidden border border-bone/30 px-6 py-3.5">
                 <span className="absolute" />
                 <span className="relative z-10 text-[11px] font-semibold uppercase tracking-[0.2em] transition-colors duration-500 group-hover:text-soot">
-                  Explore Hearth
+                  Explore Aldosi Merchants
                 </span>
                 <span className="relative z-10 text-[13px] transition-transform duration-500 group-hover:translate-x-1.5 group-hover:text-soot">→</span>
                 <span className="absolute inset-0 -translate-x-full bg-bone transition-transform duration-[650ms] ease-[cubic-bezier(.16,.84,.24,1)] group-hover:translate-x-0" />

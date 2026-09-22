@@ -72,7 +72,7 @@ export default function Story() {
             <p className="max-w-[52ch] text-[clamp(14px,1.3vw,17px)] leading-relaxed text-bone/80">
               <b className="text-bone">Twelve people. One cooker. Nobody sitting where they were told to.</b>
               <br /><br />
-              A Hearth spends its life in the middle of an argument about football, a cousin
+              An Aldosi cooker spends its life in the middle of an argument about football, a cousin
               arriving late, and a pot that has to stay warm until he does. We build for that
               room — not for the one in the brochure.
             </p>

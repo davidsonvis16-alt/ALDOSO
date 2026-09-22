@@ -86,7 +86,7 @@ export default function AuthSheet({ open, onClose }) {
         <div className="flex flex-col overflow-y-auto">
           <div className="flex items-start justify-between p-[clamp(18px,3vw,34px)] pb-0">
             <div>
-              <p className="lab">Hearth account</p>
+              <p className="lab">Aldosi Merchants account</p>
               <h3 className="disp mt-2 text-[clamp(30px,3.6vw,48px)] leading-[0.95] text-bone">Sign in</h3>
             </div>
             <CloseX onClose={onClose} />

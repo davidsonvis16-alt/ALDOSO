@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 /* ============================================================
-   HEARTH — design tokens
+   ALDOSI MERCHANTS — design tokens
    One rule: the only saturated colour in the brand is the blue
    of the gas flame. Everything else is soot, ash, clay, bone.
    ============================================================ */
@@ -26,7 +26,7 @@
   --font-hand: "Caveat", "Segoe Script", cursive;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
-  --ease-hearth: cubic-bezier(.16,.84,.24,1);
+  --ease-aldosi: cubic-bezier(.16,.84,.24,1);
   --spine-w: clamp(44px, 4.4vw, 66px);
 }
 
@@ -49,7 +49,7 @@
   a { color: inherit; text-decoration: none; }
   button { font: inherit; color: inherit; background: none; border: 0; cursor: pointer; }
   :focus-visible { outline: 2px solid var(--color-flame-hi); outline-offset: 3px; border-radius: 1px; }
-  ::selection { background: var(--color-flame); color: #fff; }
+  ::selection { background: var(--color-flame); color: var(--color-bone); }
   input, textarea { font: inherit; }
   /* the page hides the system cursor only where a custom one is drawn */
   @media (hover: hover) and (pointer: fine) {
@@ -89,7 +89,7 @@
     padding: 15px 16px;
     color: var(--color-bone);
     letter-spacing: .01em;
-    transition: border-color .3s var(--ease-hearth), background .3s var(--ease-hearth);
+    transition: border-color .3s var(--ease-aldosi), background .3s var(--ease-aldosi);
   }
   .field::placeholder { color: rgba(239,231,218,.3); }
   .field:focus {

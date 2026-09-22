@@ -21,7 +21,7 @@ export default function MenuSheet({ open, onClose }) {
         >
           <div className="flex h-full flex-col justify-between px-[clamp(20px,4.6vw,76px)] py-[clamp(24px,5vh,56px)]">
             <div className="flex items-start justify-between">
-              <span className="lab">Hearth — Nairobi</span>
+              <span className="lab">Aldosi Merchants — Nairobi</span>
               <button onClick={onClose}
                 className="group flex items-center gap-2.5 text-[10px] font-semibold uppercase tracking-[0.18em] text-bone/60 hover:text-bone">
                 Close
@@ -55,7 +55,7 @@ export default function MenuSheet({ open, onClose }) {
               <div>
                 <span className="lab">Talk to a human</span>
                 <p className="num mt-2 font-mono text-[13px] leading-relaxed text-bone/65">
-                  +254 700 000 000<br />karibu@hearth.co.ke
+                  +254 700 000 000<br />karibu@aldosimerchants.co.ke
                 </p>
               </div>
             </div>

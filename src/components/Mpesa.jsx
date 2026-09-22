@@ -55,8 +55,8 @@ export default function Mpesa({ total, items, onClose }) {
     const push = await mpesa.stkPush({
       phone: phone.replace(/\D/g, ''),
       amount: total,
-      reference: 'HEARTH',
-      description: `Hearth order · ${items} item${items === 1 ? '' : 's'}`,
+      reference: 'ALDOSI',
+      description: `Aldosi Merchants order · ${items} item${items === 1 ? '' : 's'}`,
     })
 
     // A rejected push (bad number, bad amount) never becomes a wait.
@@ -135,8 +135,8 @@ export default function Mpesa({ total, items, onClose }) {
                 )}
 
                 <dl className="mt-7 border-t border-bone/14 pt-4 text-[12.5px]">
-                  {[['Paying', 'Hearth Appliances Ltd'], ['Till', '174379'],
-                    ['Reference', 'HEARTH'], ['Items', `${items}`]].map(([k, v]) => (
+                  {[['Paying', 'Aldosi Merchants Ltd'], ['Till', '174379'],
+                    ['Reference', 'ALDOSI'], ['Items', `${items}`]].map(([k, v]) => (
                     <div key={k} className="flex items-baseline justify-between py-1.5">
                       <dt className="text-smoke">{k}</dt>
                       <dd className="num font-mono text-bone/85">{v}</dd>
@@ -171,7 +171,7 @@ export default function Mpesa({ total, items, onClose }) {
                   <span className="num font-mono text-[10px] text-smoke">now</span>
                 </div>
                 <p className="mt-3.5 text-[13px] leading-relaxed text-bone/80">
-                  <b className="text-bone">{checkout ? 'Accept' : 'Preparing'}</b> HEARTH APPLIANCES LTD
+                  <b className="text-bone">{checkout ? 'Accept' : 'Preparing'}</b> ALDOSI MERCHANTS LTD
                   <br />Ksh{total.toLocaleString('en-KE')}.00
                   <br /><span className="text-smoke-2">Enter M-PESA PIN:</span>
                 </p>

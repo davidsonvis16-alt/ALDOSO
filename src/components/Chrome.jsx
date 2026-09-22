@@ -14,8 +14,8 @@ const NAV = [
 
 /* ============================================================================
    THE SPINE — a fixed left rail carrying the wordmark, a progress hairline
-   and the name of wherever you currently are. It sits in difference blend so
-   it inverts itself against whatever scrolls underneath. No box, no glow.
+   and the name of wherever you currently are. It is drawn flat in bone — no
+   blend inversion, no box, no glow.
    ========================================================================== */
 export function Spine() {
   const { scrollYProgress } = useScroll()
@@ -40,15 +40,15 @@ export function Spine() {
 
   return (
     <div
-      className="fixed inset-y-0 left-0 z-[600] hidden w-[var(--spine-w)] flex-col items-center justify-between border-r border-bone/16 py-3.5 text-white mix-blend-difference sm:flex"
+      className="fixed inset-y-0 left-0 z-[600] hidden w-[var(--spine-w)] flex-col items-center justify-between border-r border-bone/16 py-3.5 text-bone sm:flex"
     >
-      <a href="#top" aria-label="Hearth — back to top"
-        className="pb-1 font-sans text-[clamp(13px,1.15vw,16px)] font-extrabold tracking-[0.52em] [writing-mode:vertical-rl] [transform:rotate(180deg)]"
+      <a href="#top" aria-label="Aldosi Merchants — back to top"
+        className="pb-1 font-sans text-[clamp(10px,0.9vw,13px)] font-extrabold tracking-[0.24em] [writing-mode:vertical-rl] [transform:rotate(180deg)]"
         style={{ fontVariationSettings: '"wdth" 118' }}>
-        HEARTH
+        ALDOSI MERCHANTS
       </a>
-      <div className="relative my-4 w-px flex-1 bg-white/18">
-        <motion.i className="absolute -left-px top-0 block w-[3px] origin-top bg-white"
+      <div className="relative my-4 w-px flex-1 bg-bone/18">
+        <motion.i className="absolute -left-px top-0 block w-[3px] origin-top bg-bone"
           style={{ height: '100%', scaleY: fill }} />
       </div>
       <div className="h-[132px] overflow-hidden text-[9px] font-semibold uppercase tracking-[0.3em] opacity-75 [writing-mode:vertical-rl]">
@@ -112,18 +112,18 @@ export function Nav({ active }) {
 export function Util({ count, onSearch, onCart, onAuth, onMenu }) {
   const Btn = ({ children, onClick, label }) => (
     <button onClick={onClick} aria-label={label}
-      className="group relative h-9 overflow-hidden border border-white/25 px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-white transition-colors duration-300 hover:border-white">
-      <span className="absolute inset-0 -translate-y-full bg-white transition-transform duration-[450ms] ease-[cubic-bezier(.16,.84,.24,1)] group-hover:translate-y-0" />
+      className="group relative h-9 overflow-hidden border border-bone/25 px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-bone transition-colors duration-300 hover:border-bone">
+      <span className="absolute inset-0 -translate-y-full bg-bone transition-transform duration-[450ms] ease-[cubic-bezier(.16,.84,.24,1)] group-hover:translate-y-0" />
       <span className="relative transition-colors duration-300 group-hover:text-soot">{children}</span>
     </button>
   )
   return (
-    <div className="fixed right-[clamp(14px,3vw,40px)] top-[clamp(13px,2.2vw,27px)] z-[620] flex items-center gap-1.5 mix-blend-difference">
+    <div className="fixed right-[clamp(14px,3vw,40px)] top-[clamp(13px,2.2vw,27px)] z-[620] flex items-center gap-1.5">
       <Btn onClick={onSearch} label="Search">Search</Btn>
       <Btn onClick={onAuth} label="Account">Account</Btn>
       <Btn onClick={onCart} label="Cart">Cart {count > 0 && <span className="num">({count})</span>}</Btn>
       <button onClick={onMenu} aria-label="Menu"
-        className="ml-0.5 flex h-9 items-center gap-2 border border-white/25 px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-white transition-colors hover:border-white md:hidden">
+        className="ml-0.5 flex h-9 items-center gap-2 border border-bone/25 px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-bone transition-colors hover:border-bone md:hidden">
         Menu
         <span className="flex w-3.5 flex-col gap-[3px]">
           <i className="block h-px w-full bg-current" /><i className="block h-px w-full bg-current" />

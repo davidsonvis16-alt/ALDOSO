@@ -54,12 +54,12 @@ export default function Footer({ count, onCart }) {
         initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={viewport}>
         <motion.div
           className="w-full text-center font-extrabold uppercase leading-[0.78] text-bone"
-          style={{ fontSize: 'clamp(58px,17vw,260px)', letterSpacing: '-0.035em' }}
+          style={{ fontSize: 'clamp(22px,7vw,106px)', letterSpacing: '-0.035em' }}
           initial={{ fontVariationSettings: '"wdth" 62' }}
           whileInView={{ fontVariationSettings: '"wdth" 125' }}
           viewport={viewport}
           transition={{ duration: 1.8, ease: EASE }}>
-          HEARTH
+          ALDOSI MERCHANTS
         </motion.div>
       </motion.div>
 
@@ -82,7 +82,7 @@ export default function Footer({ count, onCart }) {
       </div>
 
       <div className="mt-7 flex flex-wrap items-baseline justify-between gap-4 border-t border-bone/12 pt-5 text-[11px] text-smoke">
-        <span>© 2026 Hearth Appliances Ltd — Nairobi</span>
+        <span>© 2026 Aldosi Merchants Ltd — Nairobi</span>
         <span>Prices in <b className="text-bone/80">KES</b>, VAT inclusive</span>
         <span>Demo build · payments and sign-in disabled by design</span>
       </div>

@@ -26,7 +26,7 @@ const CONFIG = {
   consumerSecret: process.env.MPESA_CONSUMER_SECRET || '',  // ← empty on purpose
   shortCode: process.env.MPESA_SHORTCODE || '174379',
   passkey: process.env.MPESA_PASSKEY || '',                 // ← empty on purpose
-  callbackUrl: process.env.MPESA_CALLBACK_URL || 'https://hearth.co.ke/api/mpesa/callback'
+  callbackUrl: process.env.MPESA_CALLBACK_URL || 'https://aldosimerchants.co.ke/api/mpesa/callback'
 }
 
 /* Daraja failure codes, in the order a real integration meets them. */
@@ -81,7 +81,7 @@ function password(ts) {
    CheckoutRequestID that will never, ever clear.
    --------------------------------------------------------------------------- */
 router.post('/stkpush', async (req, res) => {
-  const { phone, amount, reference = 'HEARTH', description = 'Hearth order' } = req.body || {}
+  const { phone, amount, reference = 'ALDOSI', description = 'Aldosi Merchants order' } = req.body || {}
   const party = msisdn(phone)
 
   if (!validMsisdn(party)) {

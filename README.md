@@ -1,4 +1,4 @@
-# HEARTH
+# ALDOSI MERCHANTS
 
 An editorial storefront for a Nairobi cooker brand — React + Vite + Tailwind v4 +
 Framer Motion, with an Express API for M-Pesa and sign-in.
@@ -72,4 +72,4 @@ server/
   auth.js     credentials + OAuth + OTP — FUSE_IDENTITY
 ```
 
-The original single-file prototype is kept at `hearth-homepage.html`.
+The original single-file prototype is kept at `aldosi-homepage.html`.
