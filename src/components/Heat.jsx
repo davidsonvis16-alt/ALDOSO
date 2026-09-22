@@ -1,4 +1,4 @@
-import { useRef } from 'react'
+import { useEffect, useRef, useState } from 'react'
 import { motion, useScroll, useTransform, useReducedMotion } from 'framer-motion'
 import { SHOTS, src, srcSet } from '../data/media.js'
 import { Lines, Rise } from './Type.jsx'
@@ -7,20 +7,26 @@ import { EASE } from '../lib/motion.js'
 /* ============================================================================
    CHAPTER 01 — HEAT
    ----------------------------------------------------------------------------
-   A pinned rail. The section holds still for three screens of scroll while
-   the plates travel sideways past it, each one drifting at its own rate so
-   the row has depth rather than sliding as a single sheet.
+   A pinned rail. The section holds still while the plates travel sideways
+   past it, each one drifting at its own rate so the row has depth rather
+   than sliding as a single sheet.
+
+   The travel is measured off the row itself rather than written down as a
+   vw figure, because the plates are much wider proportionally on a phone
+   than on a laptop — a fixed distance runs out early there and leaves the
+   last plates parked off-screen. Measuring means the whole row clears the
+   viewport at the same pace on any width.
 
    Reduced motion gets the same photographs as an ordinary stacked grid.
    ========================================================================== */
 
 const RAIL = [
-  { shot: SHOTS.ring,    n: '01', cap: 'The ring, 4.2 kW',            w: 'w-[74vw] sm:w-[40vw]', h: 'h-[54vh]', drift: -30, grade: 'cool' },
-  { shot: SHOTS.onions,  n: '02', cap: 'Onions, cut small — as taught', w: 'w-[62vw] sm:w-[26vw]', h: 'h-[68vh]', drift: 42 },
+  { shot: SHOTS.ring,    n: '01', cap: 'The ring, 4.2 kW',            w: 'w-[74vw] sm:w-[40vw]', h: 'h-[44vh] sm:h-[54vh]', drift: -30, grade: 'cool' },
+  { shot: SHOTS.onions,  n: '02', cap: 'Onions, cut small — as taught', w: 'w-[62vw] sm:w-[26vw]', h: 'h-[52vh] sm:h-[68vh]', drift: 42 },
   { pull: true },
-  { shot: SHOTS.simmer,  n: '03', cap: 'Githeri, hour two',            w: 'w-[70vw] sm:w-[34vw]', h: 'h-[46vh]', drift: -18 },
-  { shot: SHOTS.dials,   n: '04', cap: 'Knob, brushed steel',          w: 'w-[58vw] sm:w-[22vw]', h: 'h-[62vh]', drift: 34 },
-  { shot: SHOTS.griddle, n: '05', cap: 'Chapati, second side',         w: 'w-[76vw] sm:w-[38vw]', h: 'h-[56vh]', drift: -26 },
+  { shot: SHOTS.simmer,  n: '03', cap: 'Githeri, hour two',            w: 'w-[70vw] sm:w-[34vw]', h: 'h-[38vh] sm:h-[46vh]', drift: -18 },
+  { shot: SHOTS.dials,   n: '04', cap: 'Knob, brushed steel',          w: 'w-[58vw] sm:w-[22vw]', h: 'h-[48vh] sm:h-[62vh]', drift: 34 },
+  { shot: SHOTS.griddle, n: '05', cap: 'Chapati, second side',         w: 'w-[76vw] sm:w-[38vw]', h: 'h-[46vh] sm:h-[56vh]', drift: -26 },
 ]
 
 function RailPlate({ item, progress, reduce }) {
@@ -64,11 +70,33 @@ function RailPlate({ item, progress, reduce }) {
   )
 }
 
+/* scroll pixels spent per pixel the row moves — under 1 so the plates still
+   outrun the finger slightly, the way the section always read on a laptop */
+const PACE = 0.9
+
 export default function Heat() {
   const ref = useRef(null)
+  const track = useRef(null)
   const reduce = useReducedMotion()
+  const [travel, setTravel] = useState(0)
+
+  useEffect(() => {
+    if (reduce) return
+    const el = track.current
+    if (!el) return
+    const measure = () => {
+      const frame = ref.current?.clientWidth || window.innerWidth
+      setTravel(Math.max(0, Math.round(el.scrollWidth - frame)))
+    }
+    measure()
+    const ro = new ResizeObserver(measure)
+    ro.observe(el)
+    window.addEventListener('resize', measure)
+    return () => { ro.disconnect(); window.removeEventListener('resize', measure) }
+  }, [reduce])
+
   const { scrollYProgress } = useScroll({ target: ref, offset: ['start start', 'end end'] })
-  const x = useTransform(scrollYProgress, [0, 1], ['2vw', '-182vw'])
+  const x = useTransform(scrollYProgress, [0, 1], [0, -travel])
 
   if (reduce) {
     return (
@@ -82,12 +110,14 @@ export default function Heat() {
   }
 
   return (
-    <section id="cook" ref={ref} className="relative h-[340vh]">
+    <section id="cook" ref={ref} className="relative"
+      style={{ height: `calc(100svh + ${Math.round(travel * PACE)}px)` }}>
       <div className="sticky top-0 flex h-[100svh] flex-col justify-center overflow-hidden">
         <div className="px-[clamp(20px,4.6vw,76px)] sm:pl-[calc(var(--spine-w)+clamp(20px,4.6vw,76px))]">
           <Head />
         </div>
-        <motion.div style={{ x }} className="mt-10 flex items-center gap-[clamp(18px,3vw,54px)] pl-[calc(var(--spine-w)+clamp(20px,4.6vw,76px))] will-change-transform">
+        <motion.div ref={track} style={{ x }}
+          className="mt-10 flex w-max items-center gap-[clamp(18px,3vw,54px)] pl-[calc(var(--spine-w)+clamp(20px,4.6vw,76px))] pr-[clamp(20px,4.6vw,76px)] will-change-transform">
           {RAIL.map((it, i) => <RailPlate key={i} item={it} progress={scrollYProgress} reduce={false} />)}
         </motion.div>
 
