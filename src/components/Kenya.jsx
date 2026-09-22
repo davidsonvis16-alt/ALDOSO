@@ -50,7 +50,7 @@ export default function Kenya() {
         </div>
 
         {/* --- counted facts ------------------------------------------------ */}
-        <div className="mt-[clamp(32px,5vh,64px)] grid gap-x-8 gap-y-9 border-t border-bone/14 pt-8 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-[clamp(32px,5vh,64px)] grid grid-cols-2 gap-x-5 gap-y-9 border-t border-bone/14 pt-8 sm:gap-x-8 lg:grid-cols-4">
           {FACTS.map((f, i) => <Fact key={f.label} {...f} i={i} />)}
         </div>
       </div>
@@ -84,7 +84,7 @@ function Fact({ n, label, i }) {
     <motion.div ref={ref}
       initial={{ opacity: 0, y: 24 }} whileInView={{ opacity: 1, y: 0 }} viewport={viewport}
       transition={{ duration: 0.8, ease: EASE, delay: i * 0.08 }}>
-      <b className="num block font-mono text-[clamp(38px,5.4vw,76px)] font-medium leading-none tracking-[-0.03em] text-bone">
+      <b className="num block font-mono text-[clamp(30px,5.4vw,76px)] font-medium leading-none tracking-[-0.03em] text-bone">
         {v.toLocaleString('en-KE')}
       </b>
       <span className="mt-2.5 block max-w-[24ch] text-[11.5px] leading-snug text-smoke-2">{label}</span>

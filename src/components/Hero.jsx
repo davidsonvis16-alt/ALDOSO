@@ -104,12 +104,12 @@ export default function Hero() {
 
           {/* --- the strip of readings, like a light meter -------------------- */}
           <motion.div style={{ y: still(metaY) }}
-            className="grid w-full max-w-[520px] grid-cols-2 gap-x-6 gap-y-1.5 border-t border-bone/14 pt-3 sm:grid-cols-3 lg:w-auto">
+            className="grid w-full max-w-[520px] grid-cols-3 gap-x-3 gap-y-2.5 border-t border-bone/14 pt-3 sm:gap-x-6 sm:gap-y-1.5 lg:w-auto">
             {[['16:40', 'EAT'], ['Kilimani', 'Nairobi'], ['Gas ring', '2.2 kPa'],
               ['Sufuria', 'No. 24'], ['Frame', '001'], ['Cylinder', '13 kg']].map(([k, v], i) => (
               <Rise key={k} i={4 + i * 0.3}>
-                <div className="flex items-baseline justify-between gap-3 text-[10px] uppercase tracking-[0.16em] text-bone/45">
-                  <span>{k}</span><b className="num font-mono font-medium text-bone/85">{v}</b>
+                <div className="flex flex-col gap-0.5 text-[9px] uppercase tracking-[0.1em] text-bone/45 sm:flex-row sm:items-baseline sm:justify-between sm:gap-3 sm:text-[10px] sm:tracking-[0.16em]">
+                  <span className="truncate">{k}</span><b className="num font-mono font-medium text-bone/85">{v}</b>
                 </div>
               </Rise>
             ))}

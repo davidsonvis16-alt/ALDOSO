@@ -19,7 +19,7 @@ export default function Footer({ count, onCart }) {
         </p>
       </Rise>
 
-      <div className="mt-[clamp(38px,6vh,80px)] grid gap-10 sm:grid-cols-2 lg:grid-cols-4">
+      <div className="mt-[clamp(38px,6vh,80px)] grid grid-cols-2 gap-x-6 gap-y-10 sm:gap-x-10 lg:grid-cols-4">
         {COLS.map(([h, items, href], ci) => (
           <Rise key={h} i={ci}>
             <h4 className="lab">{h}</h4>
@@ -54,7 +54,7 @@ export default function Footer({ count, onCart }) {
         initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={viewport}>
         <motion.div
           className="w-full text-center font-extrabold uppercase leading-[0.78] text-bone"
-          style={{ fontSize: 'clamp(22px,7vw,106px)', letterSpacing: '-0.035em' }}
+          style={{ fontSize: 'clamp(22px,7vw,106px)', letterSpacing: '-0.012em' }}
           initial={{ fontVariationSettings: '"wdth" 62' }}
           whileInView={{ fontVariationSettings: '"wdth" 125' }}
           viewport={viewport}

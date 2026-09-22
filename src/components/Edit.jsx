@@ -33,11 +33,11 @@ export default function Edit({ onAdd }) {
             ]}
           </Lines>
         </div>
-        <Rise i={2} className="flex flex-wrap gap-2">
+        <Rise i={2} className="grid w-full grid-cols-2 gap-2 sm:flex sm:w-auto sm:flex-wrap">
           {FILTERS.map(f => (
             <button key={f.f} onClick={() => setFilter(f.f)}
               className={cx(
-                'group relative overflow-hidden border px-4 py-2.5 text-[10px] font-semibold uppercase tracking-[0.18em] transition-colors duration-300',
+                'group relative overflow-hidden border px-4 py-3.5 text-center text-[10px] font-semibold uppercase tracking-[0.18em] transition-colors duration-300 sm:py-2.5 sm:text-left',
                 filter === f.f ? 'border-bone bg-bone text-soot' : 'border-bone/22 text-bone/70 hover:border-bone/60'
               )}>
               <span className="relative z-10">{f.label}</span>
@@ -48,13 +48,13 @@ export default function Edit({ onAdd }) {
 
       <LayoutGroup>
         <motion.div layout
-          className="mt-[clamp(38px,6vh,80px)] grid gap-x-[clamp(14px,2vw,34px)] gap-y-[clamp(34px,5vh,68px)] sm:grid-cols-2 lg:grid-cols-3">
+          className="mt-[clamp(38px,6vh,80px)] grid grid-cols-2 gap-x-[clamp(12px,2vw,34px)] gap-y-[clamp(30px,5vh,68px)] lg:grid-cols-3">
           <AnimatePresence mode="popLayout">
             {list.map((p, i) => <Card key={p.id} p={p} i={i} onAdd={onAdd} />)}
           </AnimatePresence>
 
           <motion.div layout
-            className="flex flex-col justify-end border-t border-bone/14 pt-6 sm:col-span-2 lg:col-span-1">
+            className="col-span-2 flex flex-col justify-end border-t border-bone/14 pt-6 lg:col-span-1">
             <p className="disp text-[clamp(22px,2.3vw,34px)] leading-[0.98] text-bone">
               Seven cookers. One idea:<br />the heat should do what<br />your hand just asked it to.
             </p>
@@ -94,7 +94,7 @@ function Card({ p, i, onAdd }) {
           <img
             src={src(p.shot, 900)}
             srcSet={srcSet(p.shot, [480, 900, 1200])}
-            sizes="(max-width: 640px) 100vw, 33vw"
+            sizes="(max-width: 1024px) 50vw, 33vw"
             alt={p.shot.alt}
             loading="lazy"
             className="h-full w-full object-cover transition-transform duration-[1400ms] ease-[cubic-bezier(.16,.84,.24,1)] group-hover:scale-105"
@@ -116,37 +116,38 @@ function Card({ p, i, onAdd }) {
       </div>
 
       {/* --- meta ---------------------------------------------------------- */}
-      <div className="mt-4 flex items-start justify-between gap-5 border-t border-bone/14 pt-3.5">
+      <div className="mt-4 flex flex-col gap-1.5 border-t border-bone/14 pt-3.5 sm:flex-row sm:items-start sm:justify-between sm:gap-5">
         <div>
-          <h3 className="text-[15px] font-semibold tracking-[-0.01em] text-bone">{p.name}</h3>
+          <h3 className="text-[14px] font-semibold tracking-[-0.01em] text-bone sm:text-[15px]">{p.name}</h3>
           <div className="mt-1 text-[11px] text-smoke">{p.spec}</div>
         </div>
-        <div className="shrink-0 text-right">
-          <span className="block text-[9px] uppercase tracking-[0.2em] text-smoke">KES</span>
-          <span className="num font-mono text-[17px] text-bone">{p.price.toLocaleString('en-KE')}</span>
+        <div className="flex items-baseline justify-between gap-2 sm:block sm:shrink-0 sm:text-right">
+          <span className="text-[9px] uppercase tracking-[0.2em] text-smoke sm:block">KES</span>
+          <span className="num font-mono text-[15px] text-bone sm:text-[17px]">{p.price.toLocaleString('en-KE')}</span>
         </div>
       </div>
 
       {/* --- buy ----------------------------------------------------------- */}
       <div className="mt-3.5 flex gap-2">
         <button onClick={add}
-          className="group/b relative flex-1 overflow-hidden border border-bone/25 px-4 py-3 text-left">
+          className="group/b relative flex-1 overflow-hidden border border-bone/25 px-3 py-3.5 text-left sm:px-4 sm:py-3">
           <span className="absolute inset-0 -translate-x-full bg-bone transition-transform duration-[600ms] ease-[cubic-bezier(.16,.84,.24,1)] group-hover/b:translate-x-0"
             style={added ? { transform: 'translateX(0)' } : undefined} />
           <span className={cx(
             'relative z-10 flex items-center justify-between text-[10px] font-semibold uppercase tracking-[0.18em] transition-colors duration-500',
             added ? 'text-soot' : 'text-bone group-hover/b:text-soot'
           )}>
-            {added ? 'In the cart' : 'Add to cart'}
+            <span className="sm:hidden">{added ? 'In cart' : 'Add'}</span>
+            <span className="hidden sm:inline">{added ? 'In the cart' : 'Add to cart'}</span>
             <span className="text-[13px]">{added ? '✓' : '+'}</span>
           </span>
         </button>
         <div className="flex items-center border border-bone/25">
           <button onClick={() => setQty(q => Math.max(1, q - 1))} aria-label="Fewer"
-            className="h-full px-3 text-bone/60 transition-colors hover:text-bone">−</button>
-          <var className="num w-6 text-center font-mono text-[12px] not-italic text-bone">{qty}</var>
+            className="h-full px-2.5 text-bone/60 transition-colors hover:text-bone sm:px-3">−</button>
+          <var className="num w-5 text-center font-mono text-[12px] not-italic text-bone sm:w-6">{qty}</var>
           <button onClick={() => setQty(q => Math.min(9, q + 1))} aria-label="More"
-            className="h-full px-3 text-bone/60 transition-colors hover:text-bone">+</button>
+            className="h-full px-2.5 text-bone/60 transition-colors hover:text-bone sm:px-3">+</button>
         </div>
       </div>
     </motion.article>

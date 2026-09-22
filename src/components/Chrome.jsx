@@ -112,7 +112,7 @@ export function Nav({ active }) {
 export function Util({ count, onSearch, onCart, onAuth, onMenu }) {
   const Btn = ({ children, onClick, label }) => (
     <button onClick={onClick} aria-label={label}
-      className="group relative h-9 overflow-hidden border border-bone/25 px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-bone transition-colors duration-300 hover:border-bone">
+      className="group relative h-11 overflow-hidden border border-bone/25 px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-bone transition-colors duration-300 hover:border-bone sm:h-9">
       <span className="absolute inset-0 -translate-y-full bg-bone transition-transform duration-[450ms] ease-[cubic-bezier(.16,.84,.24,1)] group-hover:translate-y-0" />
       <span className="relative transition-colors duration-300 group-hover:text-soot">{children}</span>
     </button>
@@ -123,7 +123,7 @@ export function Util({ count, onSearch, onCart, onAuth, onMenu }) {
       <Btn onClick={onAuth} label="Account">Account</Btn>
       <Btn onClick={onCart} label="Cart">Cart {count > 0 && <span className="num">({count})</span>}</Btn>
       <button onClick={onMenu} aria-label="Menu"
-        className="ml-0.5 flex h-9 items-center gap-2 border border-bone/25 px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-bone transition-colors hover:border-bone md:hidden">
+        className="ml-0.5 flex h-11 items-center gap-2 border border-bone/25 px-3 text-[10px] font-semibold uppercase tracking-[0.18em] text-bone transition-colors hover:border-bone sm:h-9 md:hidden">
         Menu
         <span className="flex w-3.5 flex-col gap-[3px]">
           <i className="block h-px w-full bg-current" /><i className="block h-px w-full bg-current" />
